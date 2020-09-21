@@ -8,6 +8,7 @@ package lib
 
 import (
 	"context"
+	"encoding/pem"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -23,7 +24,6 @@ import (
 
 	"github.com/cloudflare/cfssl/log"
 	"github.com/cloudflare/cfssl/revoke"
-	"github.com/cloudflare/cfssl/signer"
 	"github.com/felixge/httpsnoop"
 	ghandlers "github.com/gorilla/handlers"
 	gmux "github.com/gorilla/mux"
@@ -37,6 +37,7 @@ import (
 	stls "github.com/hyperledger/fabric-ca/lib/tls"
 	"github.com/hyperledger/fabric-ca/util"
 	"github.com/hyperledger/fabric-lib-go/healthz"
+	"github.com/hyperledger/fabric/bccsp/gm"
 	"github.com/hyperledger/fabric/common/metrics"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
@@ -857,23 +858,37 @@ func (s *Server) autoGenerateTLSCertificateKey() error {
 	log.Debugf("TLS CSR: %+v\n", csrReq)
 
 	// Can't use the same CN as the signing certificate CN (default: fabric-ca-server) otherwise no AKI is generated
-	csr, _, err := client.GenCSR(&csrReq, hostname)
+	csr, key, err := client.GenCSR(&csrReq, hostname)
 	if err != nil {
-		return fmt.Errorf("Failed to generate CSR: %s", err)
+		return fmt.Errorf("failed to generate CSR: %s", err)
 	}
 
-	// Use the 'tls' profile that will return a certificate with the appropriate extensions
-	req := signer.SignRequest{
-		Profile: "tls",
-		Request: string(csr),
+	block, _ := pem.Decode(csr)
+
+	sm2Template, err := parseCertificateRequest(block.Bytes)
+
+	if err != nil {
+		log.Infof("parseCertificateRequest return err:%s", err)
+		return err
 	}
+
+	log.Infof("key is %T   ---%T", sm2Template.PublicKey, sm2Template)
+
+	cert, err := gm.CreateCertificateToMem(sm2Template, sm2Template, key)
+
+	//cert, err := gm.CreateCertificateToMem(csr, csr, key)
+	// Use the 'tls' profile that will return a certificate with the appropriate extensions
+	// req := signer.SignRequest{
+	// Profile: "tls",
+	// Request: string(csr),
+	// }
 
 	// Use default CA to get back signed TLS certificate
-	cert, err := s.CA.enrollSigner.Sign(req)
-	if err != nil {
-		return fmt.Errorf("Failed to generate TLS certificate: %s", err)
-	}
-
+	// cert, err := s.CA.enrollSigner.Sign(req)
+	// if err != nil {
+	// return fmt.Errorf("Failed to generate TLS certificate: %s", err)
+	// }
+	//
 	// Write the TLS certificate to the file system
 	err = ioutil.WriteFile(s.Config.TLS.CertFile, cert, 0644)
 	if err != nil {
