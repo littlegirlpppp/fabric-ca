@@ -6,11 +6,13 @@
 FROM _BASE_NS_/fabric-baseos:_BASE_TAG_
 ENV FABRIC_CA_HOME /etc/hyperledger/fabric-ca-server
 ARG FABRIC_CA_DYNAMIC_LINK=false
-RUN mkdir -p $FABRIC_CA_HOME /var/hyperledger/fabric-ca-server
+#RUN mkdir -p $FABRIC_CA_HOME /var/hyperledger/fabric-ca-server
 COPY payload/fabric-ca-client /usr/local/bin
 RUN chmod +x /usr/local/bin/fabric-ca-client
 COPY payload/fabric-ca-server /usr/local/bin
 RUN chmod +x /usr/local/bin/fabric-ca-server
+RUN sed -i '/security/d' /etc/apt/sources.list
+RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
 RUN apt-get update && apt-get install -y netcat && rm -rf /var/cache/apt
 
 # libraries needed when image is built dynamically
