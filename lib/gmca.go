@@ -27,6 +27,59 @@ import (
 	"github.com/hyperledger/fabric-ca/util"
 )
 
+// add by thoughtwork's matrix
+func OverrideHosts(template *sm2.Certificate, hosts []string) {
+	if hosts != nil {
+		template.IPAddresses = []net.IP{}
+		template.EmailAddresses = []string{}
+		template.DNSNames = []string{}
+	}
+
+	for i := range hosts {
+		if ip := net.ParseIP(hosts[i]); ip != nil {
+			template.IPAddresses = append(template.IPAddresses, ip)
+		} else if email, err := mail.ParseAddress(hosts[i]); err == nil && email != nil {
+			template.EmailAddresses = append(template.EmailAddresses, email.Address)
+		} else {
+			template.DNSNames = append(template.DNSNames, hosts[i])
+		}
+	}
+}
+
+// replaceSliceIfEmpty replaces the contents of replaced with newContents if
+// the slice referenced by replaced is empty
+func replaceSliceIfEmpty(replaced, newContents *[]string) {
+	if len(*replaced) == 0 {
+		*replaced = *newContents
+	}
+}
+
+// PopulateSubjectFromCSR has functionality similar to Name, except
+// it fills the fields of the resulting pkix.Name with req's if the
+// subject's corresponding fields are empty
+func PopulateSubjectFromCSR(s *signer.Subject, req pkix.Name) pkix.Name {
+	// if no subject, use req
+	if s == nil {
+		return req
+	}
+	log.Debugf("[matrix] signer.Subject: %s, req: %s", s, req)
+	name := s.Name()
+
+	if name.CommonName == "" {
+		name.CommonName = req.CommonName
+	}
+
+	replaceSliceIfEmpty(&name.Country, &req.Country)
+	replaceSliceIfEmpty(&name.Province, &req.Province)
+	replaceSliceIfEmpty(&name.Locality, &req.Locality)
+	replaceSliceIfEmpty(&name.Organization, &req.Organization)
+	replaceSliceIfEmpty(&name.OrganizationalUnit, &req.OrganizationalUnit)
+	if name.SerialNumber == "" {
+		name.SerialNumber = req.SerialNumber
+	}
+	return name
+}
+
 //证书签名
 func signCert(req signer.SignRequest, ca *CA) (cert []byte, err error) {
 	/*csr := parseCertificateRequest()
@@ -65,6 +118,11 @@ func signCert(req signer.SignRequest, ca *CA) (cert []byte, err error) {
 	}
 	log.Infof("^^^^^^^^^^^^^^^^^^^^^^^x509cert = %v", x509cert)
 	rootca := ParseX509Certificate2Sm2(x509cert)
+
+	// add by thoughtwork's matrix
+	// override the ou with role
+	OverrideHosts(template, req.Hosts)
+	template.Subject = PopulateSubjectFromCSR(req.Subject, template.Subject)
 
 	cert, err = gm.CreateCertificateToMem(template, rootca, rootkey)
 	if err != nil {
