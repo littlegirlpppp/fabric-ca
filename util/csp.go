@@ -255,6 +255,7 @@ func GetSignerFromCertFile(certFile string, csp bccsp.BCCSP) (bccsp.Key, crypto.
 		log.Infof("+++++++++++++ error = %s,Maybe it is a gm cert!", err.Error())
 		sm2Cert, err := sm2.ReadCertificateFromPem(certFile)
 		if err != nil {
+			log.Infof("[matrix] err: ", err)
 			return nil, nil, nil, err
 		}
 

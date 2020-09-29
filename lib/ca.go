@@ -271,6 +271,7 @@ func (ca *CA) initKeyMaterial(renew bool) error {
 	if err != nil {
 		return err
 	}
+	log.Infof("[matrix] ca cert's len: ", len(cert))
 	// Store the certificate to file
 	err = writeFile(certFile, cert, 0644)
 	if err != nil {
