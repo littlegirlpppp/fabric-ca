@@ -38,7 +38,7 @@ MARCH=$(shell go env GOOS)-$(shell go env GOARCH)
 STABLE_TAG ?= $(ARCH)-$(BASE_VERSION)-stable
 
 ifneq ($(IS_RELEASE),true)
-EXTRA_VERSION ?= snapshot-$(shell git rev-parse --short HEAD)
+EXTRA_VERSION ?= gm-$(shell git rev-parse --short HEAD)
 PROJECT_VERSION=$(BASE_VERSION)-$(EXTRA_VERSION)
 FABRIC_TAG ?= latest
 else
