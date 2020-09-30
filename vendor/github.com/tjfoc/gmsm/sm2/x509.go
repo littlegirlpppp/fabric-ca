@@ -18,7 +18,7 @@ package sm2
 
 import (
 	"bytes"
-	"crypto"
+	crypto "crypto"
 	"crypto/dsa"
 	"crypto/ecdsa"
 	"crypto/elliptic"
@@ -1179,11 +1179,23 @@ func parsePublicKey(algo PublicKeyAlgorithm, keyData *publicKeyInfo) (interface{
 		if x == nil {
 			return nil, errors.New("x509: failed to unmarshal elliptic curve point")
 		}
-		pub := &ecdsa.PublicKey{
-			Curve: namedCurve,
-			X:     x,
-			Y:     y,
+
+		var pub interface{}
+
+		if namedCurve == P256Sm2() {
+			pub = &PublicKey{
+				Curve: namedCurve,
+				X:     x,
+				Y:     y,
+			}
+		} else {
+			pub = &ecdsa.PublicKey{
+				Curve: namedCurve,
+				X:     x,
+				Y:     y,
+			}
 		}
+
 		return pub, nil
 	default:
 		return nil, nil
