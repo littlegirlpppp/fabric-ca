@@ -33,7 +33,6 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"github.com/cloudflare/cfssl/log"
 	"hash"
 	"io"
 	"io/ioutil"
@@ -2513,11 +2512,9 @@ func ReadCertificateFromPem(FileName string) (*Certificate, error) {
 
 func CreateCertificateToMem(template, parent *Certificate, pubKey *PublicKey, privKey *PrivateKey) ([]byte, error) {
 	der, err := CreateCertificate(rand.Reader, template, parent, pubKey, privKey)
-	log.Debug("11111111")
 	if err != nil {
 		return nil, err
 	}
-	log.Debug("22222222")
 	block := &pem.Block{
 		Type:  "CERTIFICATE",
 		Bytes: der,
