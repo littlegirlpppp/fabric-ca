@@ -163,7 +163,9 @@ func GetSignerFromCert(cert *x509.Certificate, csp bccsp.BCCSP) (bccsp.Key, cryp
 	}
 	log.Infof("xxxx begin csp.KeyImport,cert.PublicKey is %T   csp:%T", cert.PublicKey, csp)
 	switch cert.PublicKey.(type) {
-	case sm2.PublicKey:
+	case *ecdsa.PublicKey:
+		log.Infof("xxxxx cert is ecdsa puk")
+	case *sm2.PublicKey:
 		log.Infof("xxxxx cert is sm2 puk")
 	default:
 		log.Infof("xxxxx cert is default puk")
@@ -297,26 +299,9 @@ func ImportBCCSPKeyFromPEM(keyFile string, myCSP bccsp.BCCSP, temporary bool) (b
 	}
 	switch key.(type) {
 	case *sm2.PrivateKey:
-		opts := &factory.FactoryOpts{
-			//ProviderName: "SW",
-			ProviderName: "GM",
-			SwOpts: &factory.SwOpts{
-				//HashFamily: "SHA2",
-				HashFamily: "GMSM3",
-				SecLevel:   256,
-
-				FileKeystore: &factory.FileKeystoreOpts{
-					KeyStorePath: keyFile,
-				},
-			},
-		}
-		csp, err := factory.GetBCCSPFromOpts(opts)
-		if err != nil {
-			return nil, fmt.Errorf("Failed to convert SM2 private key from %s: %s", keyFile, err.Error())
-		}
 		log.Info("xxxx sm2.PrivateKey!!!!!!!!!!!")
 		block, _ := pem.Decode(keyBuff)
-		priv, err := csp.KeyImport(block.Bytes, &bccsp.GMSM2PrivateKeyImportOpts{Temporary: true})
+		priv, err := myCSP.KeyImport(block.Bytes, &bccsp.GMSM2PrivateKeyImportOpts{Temporary: temporary})
 		if err != nil {
 			return nil, fmt.Errorf("Failed to convert SM2 private key from %s: %s", keyFile, err.Error())
 		}
