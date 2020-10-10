@@ -1042,6 +1042,20 @@ func checkSignature(algo SignatureAlgorithm, signed, signature []byte, publicKey
 			}
 		}
 		return
+	case *PublicKey:
+		sm2Sig := new(sm2Signature)
+		if rest, err := asn1.Unmarshal(signature, sm2Sig); err != nil {
+			return err
+		} else if len(rest) != 0 {
+			return errors.New("x509: trailing data after sm2 signature")
+		}
+		if sm2Sig.R.Sign() <= 0 || sm2Sig.S.Sign() <= 0 {
+			return errors.New("x509: sm2 signature contained zero or negative values")
+		}
+		if !Sm2Verify(pub, signed, nil, sm2Sig.R, sm2Sig.S) {
+			return errors.New("x509: SM2 verification failure")
+		}
+		return
 	}
 	return ErrUnsupportedAlgorithm
 }
