@@ -22,7 +22,8 @@ pipeline {
                 do
                    docker tag $line $DOCKER_REGISTRY/$line
                    docker tag $line $DOCKER_REGISTRY/${line/:*/:latest}
-                   docker push $DOCKER_REGISTRY/$line $DOCKER_REGISTRY/${line/:*/:latest}
+                   docker push $DOCKER_REGISTRY/$line
+                   docker push $DOCKER_REGISTRY/${line/:*/:latest}
                    docker rmi $line $DOCKER_REGISTRY/$line
                 done
                 '''
