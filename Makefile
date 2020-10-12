@@ -38,7 +38,7 @@ MARCH=$(shell go env GOOS)-$(shell go env GOARCH)
 STABLE_TAG ?= $(ARCH)-$(BASE_VERSION)-stable
 
 ifneq ($(IS_RELEASE),true)
-EXTRA_VERSION ?= gm-$(shell git rev-parse --short HEAD)
+EXTRA_VERSION ?= $(shell git rev-parse --short HEAD)
 PROJECT_VERSION=$(BASE_VERSION)-$(EXTRA_VERSION)
 FABRIC_TAG ?= latest
 else
@@ -80,6 +80,7 @@ rename: .FORCE
 docker: $(patsubst %,build/image/%/$(DUMMY), $(IMAGES))
 
 docker-all: docker
+
 
 docker-fabric-ca: docker
 
@@ -130,7 +131,7 @@ build/docker/bin/%:
 
 build/image/%/$(DUMMY): Makefile build/image/%/payload
 	$(eval TARGET = ${patsubst build/image/%/$(DUMMY),%,${@}})
-	$(eval DOCKER_NAME = $(DOCKER_NS)/$(TARGET))
+	$(eval DOCKER_NAME = $(DOCKER_NS)/$(TARGET)-gm)
 	@echo "Building docker $(TARGET) image"
 	@cat images/$(TARGET)/Dockerfile.in \
 		| sed -e 's|_BASE_NS_|$(BASE_DOCKER_NS)|g' \
@@ -221,9 +222,16 @@ fvt-tests:
 ci-tests: docker-clean all-tests docker-fvt docs
 	@docker run -v $(shell pwd):/opt/gopath/src/github.com/hyperledger/fabric-ca ${DOCKER_NS}/fabric-ca-fvt
 
+%-docker-list:
+	$(eval TARGET = ${patsubst %-docker-list,%,${@}})
+	@echo $(DOCKER_NS)/$(TARGET)-gm:$(DOCKER_TAG)
+
+docker-list: $(patsubst %,%-docker-list, $(IMAGES))
+
 %-docker-clean:
 	$(eval TARGET = ${patsubst %-docker-clean,%,${@}})
 	-docker images -q $(DOCKER_NS)/$(TARGET):latest | xargs -I '{}' docker rmi -f '{}'
+	-docker images -q $(DOCKER_NS)/$(TARGET)-gm:latest | xargs -I '{}' docker rmi -f '{}'
 	-docker images -q $(NEXUS_URL)/*:$(STABLE_TAG) | xargs -I '{}' docker rmi -f '{}'
 	-@rm -rf build/image/$(TARGET) ||:
 
