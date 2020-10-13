@@ -1,3 +1,20 @@
+def getRepoURL() {
+  sh "git config --get remote.origin.url > .git/remote-url"
+  return readFile(".git/remote-url").trim()
+}
+
+void setBuildStatus(String message, String state) {
+  repoUrl = getRepoURL()
+
+  step([
+      $class: "GitHubCommitStatusSetter",
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "repoUrl"],
+      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
+      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+  ]);
+}
+
 pipeline {
     agent any
 
@@ -9,6 +26,7 @@ pipeline {
     stages {
         stage('Build Image') {
             steps {
+                setBuildStatus("Build Started", "PENDING");
                 sh '''
                 make docker
                 '''
@@ -49,6 +67,15 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            setBuildStatus("Build succeeded", "SUCCESS");
+        }
+        unsuccess {
+            setBuildStatus("Build failed", "FAILURE");
         }
     }
 }
