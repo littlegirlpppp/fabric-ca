@@ -29,9 +29,25 @@ pipeline {
                 '''
             }
         }
+
         stage('Test Fabcar') {
             steps {
-                echo 'Test Fabcar'
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                    script {
+                        def result = build(
+                            job: 'fabric-sample-gm',
+                            propagate: false,
+                            parameters: [
+                                [$class: 'StringParameterValue', name: 'IMAGE_CA', value: sh(script: 'make fabric-ca-docker-list 2>/dev/null ', returnStdout: true).trim()],
+                            ]
+                        )
+                        if (result.result.equals("SUCCESS")) {
+                            echo "Passed Test Fabcar"
+                        } else {
+                            error "Failed Test Fabcar"
+                        }
+                    }
+                }
             }
         }
     }
