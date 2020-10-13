@@ -74,7 +74,7 @@ pipeline {
         success {
             setBuildStatus("Build succeeded", "SUCCESS");
         }
-        unsuccess {
+        unsuccessful {
             setBuildStatus("Build failed", "FAILURE");
         }
     }
