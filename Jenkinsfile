@@ -19,7 +19,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_NS     = "twbc"
+        DOCKER_NS     = "${DOCKER_REGISTRY}/twbc"
         EXTRA_VERSION = "build-${BUILD_NUMBER}"
     }
 
@@ -38,11 +38,10 @@ pipeline {
                 sh '''
                 make docker-list 2>/dev/null | grep ^twbc | while read line
                 do
-                   docker tag $line $DOCKER_REGISTRY/$line
-                   docker tag $line $DOCKER_REGISTRY/${line/:*/:latest}
-                   docker push $DOCKER_REGISTRY/$line
-                   docker push $DOCKER_REGISTRY/${line/:*/:latest}
-                   docker rmi $line $DOCKER_REGISTRY/$line
+                   docker tag $line ${line/:*/:latest}
+                   docker push $line
+                   docker push ${line/:*/:latest}
+                   docker rmi $line
                 done
                 '''
             }
