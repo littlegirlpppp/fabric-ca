@@ -8,12 +8,13 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/cloudflare/cfssl/config"
-	cferr "github.com/cloudflare/cfssl/errors"
-	"github.com/cloudflare/cfssl/helpers"
 	"net"
 	"net/mail"
 	"time"
+
+	"github.com/cloudflare/cfssl/config"
+	cferr "github.com/cloudflare/cfssl/errors"
+	"github.com/cloudflare/cfssl/helpers"
 
 	"crypto"
 	"crypto/rand"
@@ -67,7 +68,6 @@ func PopulateSubjectFromCSR(s *signer.Subject, req pkix.Name) pkix.Name {
 	if s == nil {
 		return req
 	}
-	log.Debugf("[matrix] signer.Subject: %s, req: %s", s, req)
 	name := s.Name()
 
 	if name.CommonName == "" {
