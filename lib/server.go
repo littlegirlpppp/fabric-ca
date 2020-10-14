@@ -10,6 +10,7 @@ import (
 	"context"
 	"encoding/pem"
 	"fmt"
+	"github.com/cloudflare/cfssl/signer"
 	"io"
 	"io/ioutil"
 	"net"
@@ -851,8 +852,6 @@ func (s *Server) autoGenerateTLSCertificateKey() error {
 		Config:  clientCfg,
 	}
 
-	log.Debugf("[matrix] autoGenerateTLSCertificateKey")
-
 	// Generate CSR that will be used to create the TLS certificate
 	csrReq := s.Config.CAcfg.CSR
 	csrReq.CA = nil // Not requesting a CA certificate
@@ -865,41 +864,44 @@ func (s *Server) autoGenerateTLSCertificateKey() error {
 		return fmt.Errorf("failed to generate CSR: %s", err)
 	}
 
-	block, _ := pem.Decode(csr)
+	var cert []byte
 
-	sm2Template, err := parseCertificateRequest(block.Bytes)
+	if IsGMConfig() {
+		block, _ := pem.Decode(csr)
 
-	if err != nil {
-		log.Infof("parseCertificateRequest return err:%s", err)
-		return err
+		sm2Template, err := parseCertificateRequest(block.Bytes)
+
+		if err != nil {
+			log.Infof("parseCertificateRequest return err:%s", err)
+			return err
+		}
+
+		log.Infof("key is %T   ---%T", sm2Template.PublicKey, sm2Template)
+		profile, err := FindProfile(s.CA.enrollSigner.Policy(), "tls")
+		if err != nil {
+			return err
+		}
+
+		err = FillTemplate(sm2Template, s.CA.enrollSigner.Policy().Default, profile, sm2Template.NotBefore, sm2Template.NotAfter)
+		if err != nil {
+			return err
+		}
+
+		cert, err = gm.CreateCertificateToMem(sm2Template, sm2Template, key)
+	} else {
+		// Use the 'tls' profile that will return a certificate with the appropriate extensions
+		req := signer.SignRequest{
+			Profile: "tls",
+			Request: string(csr),
+		}
+
+		// Use default CA to get back signed TLS certificate
+		cert, err = s.CA.enrollSigner.Sign(req)
 	}
 
-	log.Infof("key is %T   ---%T", sm2Template.PublicKey, sm2Template)
-	profile, err := FindProfile(s.CA.enrollSigner.Policy(), "tls")
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to generate TLS certificate: %s", err)
 	}
-
-	err = FillTemplate(sm2Template, s.CA.enrollSigner.Policy().Default, profile, sm2Template.NotBefore, sm2Template.NotAfter)
-	if err != nil {
-		return err
-	}
-
-	cert, err := gm.CreateCertificateToMem(sm2Template, sm2Template, key)
-
-	//cert, err := gm.CreateCertificateToMem(csr, csr, key)
-	// Use the 'tls' profile that will return a certificate with the appropriate extensions
-	//req := signer.SignRequest{
-	//Profile: "tls",
-	//Request: string(csr),
-	//}
-
-	// Use default CA to get back signed TLS certificate
-	//cert, err := s.CA.enrollSigner.Sign(req)
-	//if err != nil {
-	//return fmt.Errorf("Failed to generate TLS certificate: %s", err)
-	//}
-
 	// Write the TLS certificate to the file system
 	err = ioutil.WriteFile(s.Config.TLS.CertFile, cert, 0644)
 	if err != nil {
