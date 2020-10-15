@@ -21,47 +21,57 @@ pipeline {
     environment {
         DOCKER_NS     = "${DOCKER_REGISTRY}/twbc"
         EXTRA_VERSION = "build-${BUILD_NUMBER}"
+        GOPATH        = "${WORKSPACE}"
     }
 
     stages {
         stage('Build Image') {
             steps {
                 setBuildStatus("Build Started", "PENDING");
-                sh '''
-                make docker
-                '''
+
+                dir("src/github.com/hyperledger/fabric-ca") {
+                    checkout scm
+
+                    sh '''
+                    make docker
+                    '''
+                }
             }
         }
         stage('Upload Image') {
             steps {
-                sh 'aws ecr get-login-password | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}'
-                sh '''
-                make docker-list 2>/dev/null | grep ^twbc | while read line
-                do
-                   docker tag $line ${line/:*/:latest}
-                   docker push $line
-                   docker push ${line/:*/:latest}
-                   docker rmi $line
-                done
-                '''
+                dir("src/github.com/hyperledger/fabric-ca") {
+                    sh 'aws ecr get-login-password | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}'
+                    sh '''
+                    make docker-list 2>/dev/null | grep ^twbc | while read line
+                    do
+                       docker tag $line ${line/:*/:latest}
+                       docker push $line
+                       docker push ${line/:*/:latest}
+                       docker rmi $line
+                    done
+                    '''
+                }
             }
         }
 
         stage('Test Fabcar') {
             steps {
-                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    script {
-                        def result = build(
-                            job: 'fabric-sample-gm',
-                            propagate: false,
-                            parameters: [
-                                [$class: 'StringParameterValue', name: 'IMAGE_CA', value: sh(script: 'make fabric-ca-docker-list 2>/dev/null ', returnStdout: true).trim()],
-                            ]
-                        )
-                        if (result.result.equals("SUCCESS")) {
-                            echo "Passed Test Fabcar"
-                        } else {
-                            error "Failed Test Fabcar"
+                dir("src/github.com/hyperledger/fabric-ca") {
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        script {
+                            def result = build(
+                                job: 'fabric-sample-gm',
+                                propagate: false,
+                                parameters: [
+                                    [$class: 'StringParameterValue', name: 'IMAGE_CA', value: sh(script: 'make fabric-ca-docker-list 2>/dev/null ', returnStdout: true).trim()],
+                                ]
+                            )
+                            if (result.result.equals("SUCCESS")) {
+                                echo "Passed Test Fabcar"
+                            } else {
+                                error "Failed Test Fabcar"
+                            }
                         }
                     }
                 }
