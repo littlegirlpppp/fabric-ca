@@ -43,7 +43,7 @@ pipeline {
                 dir("src/github.com/hyperledger/fabric-ca") {
                     sh 'aws ecr get-login-password | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}'
                     sh '''
-                    make docker-list 2>/dev/null | grep ^twbc | while read line
+                    make docker-list 2>/dev/null | grep "$DOCKER_NS" | while read line
                     do
                        docker tag $line ${line/:*/:latest}
                        docker push $line
