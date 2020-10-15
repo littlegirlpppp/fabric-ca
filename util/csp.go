@@ -246,22 +246,20 @@ func GetSignerFromSM2Cert(cert *sm2.Certificate, csp bccsp.BCCSP) (bccsp.Key, cr
 
 // GetSignerFromCertFile load skiFile and load private key represented by ski and return bccsp signer that conforms to crypto.Signer
 func GetSignerFromCertFile(certFile string, csp bccsp.BCCSP) (bccsp.Key, crypto.Signer, *x509.Certificate, error) {
+	var cert *x509.Certificate
 	// Load cert file
 	certBytes, err := ioutil.ReadFile(certFile)
 	if err != nil {
 		return nil, nil, nil, errors.Wrapf(err, "Could not read certFile '%s'", certFile)
 	}
-	cert, err := helpers.ParseCertificatePEM(certBytes)
-	//var newCert = &x509.Certificate{}
-	if err != nil || cert == nil {
-		log.Infof("+++++++++++++ error = %s,Maybe it is a gm cert!", err.Error())
+	if IsGMConfig() {
 		sm2Cert, err := sm2.ReadCertificateFromPem(certFile)
 		if err != nil {
-			log.Infof("[matrix] err: ", err)
 			return nil, nil, nil, err
 		}
-
 		cert = gm.ParseSm2Certificate2X509(sm2Cert)
+	} else {
+		cert, err = helpers.ParseCertificatePEM(certBytes)
 	}
 	key, cspSigner, err := GetSignerFromCert(cert, csp)
 	log.Infof("+++++++++++++KEY = %T error = %v", key, err)

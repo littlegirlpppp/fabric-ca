@@ -1,14 +1,20 @@
 package lib
 
 import (
+	"crypto/sha1"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"net"
 	"net/mail"
 	"time"
+
+	"github.com/cloudflare/cfssl/config"
+	cferr "github.com/cloudflare/cfssl/errors"
+	"github.com/cloudflare/cfssl/helpers"
 
 	"crypto"
 	"crypto/rand"
@@ -62,7 +68,6 @@ func PopulateSubjectFromCSR(s *signer.Subject, req pkix.Name) pkix.Name {
 	if s == nil {
 		return req
 	}
-	log.Debugf("[matrix] signer.Subject: %s, req: %s", s, req)
 	name := s.Name()
 
 	if name.CommonName == "" {
@@ -123,6 +128,15 @@ func signCert(req signer.SignRequest, ca *CA) (cert []byte, err error) {
 	// override the ou with role
 	OverrideHosts(template, req.Hosts)
 	template.Subject = PopulateSubjectFromCSR(req.Subject, template.Subject)
+	profile, err := FindProfile(ca.enrollSigner.Policy(), req.Profile)
+	if err != nil {
+		return nil, err
+	}
+
+	err = FillTemplate(template, ca.enrollSigner.Policy().Default, profile, template.NotBefore, template.NotAfter)
+	if err != nil {
+		return nil, err
+	}
 
 	cert, err = gm.CreateCertificateToMem(template, rootca, rootkey)
 	if err != nil {
@@ -154,9 +168,272 @@ func signCert(req signer.SignRequest, ca *CA) (cert []byte, err error) {
 	return
 }
 
+// CAPolicy contains the CA issuing policy as default policy.
+var CAPolicy = func() *config.Signing {
+	return &config.Signing{
+		Default: &config.SigningProfile{
+			Usage:        []string{"cert sign", "crl sign"},
+			ExpiryString: "43800h",
+			Expiry:       5 * helpers.OneYear,
+			CAConstraint: config.CAConstraint{IsCA: true},
+		},
+	}
+}
+
+type subjectPublicKeyInfo struct {
+	Algorithm        pkix.AlgorithmIdentifier
+	SubjectPublicKey asn1.BitString
+}
+
+func ComputeSKI(template *sm2.Certificate) ([]byte, error) {
+	pub := template.PublicKey
+	encodedPub, err := sm2.MarshalPKIXPublicKey(pub)
+	if err != nil {
+		return nil, err
+	}
+
+	var subPKI subjectPublicKeyInfo
+	_, err = asn1.Unmarshal(encodedPub, &subPKI)
+	if err != nil {
+		return nil, err
+	}
+
+	pubHash := sha1.Sum(subPKI.SubjectPublicKey.Bytes)
+	return pubHash[:], nil
+}
+
+type policyInformation struct {
+	PolicyIdentifier asn1.ObjectIdentifier
+	Qualifiers       []interface{} `asn1:"tag:optional,omitempty"`
+}
+
+type cpsPolicyQualifier struct {
+	PolicyQualifierID asn1.ObjectIdentifier
+	Qualifier         string `asn1:"tag:optional,ia5"`
+}
+
+type userNotice struct {
+	ExplicitText string `asn1:"tag:optional,utf8"`
+}
+type userNoticePolicyQualifier struct {
+	PolicyQualifierID asn1.ObjectIdentifier
+	Qualifier         userNotice
+}
+
+var (
+	// Per https://tools.ietf.org/html/rfc3280.html#page-106, this represents:
+	// iso(1) identified-organization(3) dod(6) internet(1) security(5)
+	//   mechanisms(5) pkix(7) id-qt(2) id-qt-cps(1)
+	iDQTCertificationPracticeStatement = asn1.ObjectIdentifier{1, 3, 6, 1, 5, 5, 7, 2, 1}
+	// iso(1) identified-organization(3) dod(6) internet(1) security(5)
+	//   mechanisms(5) pkix(7) id-qt(2) id-qt-unotice(2)
+	iDQTUserNotice = asn1.ObjectIdentifier{1, 3, 6, 1, 5, 5, 7, 2, 2}
+
+	// CTPoisonOID is the object ID of the critical poison extension for precertificates
+	// https://tools.ietf.org/html/rfc6962#page-9
+	CTPoisonOID = asn1.ObjectIdentifier{1, 3, 6, 1, 4, 1, 11129, 2, 4, 3}
+
+	// SCTListOID is the object ID for the Signed Certificate Timestamp certificate extension
+	// https://tools.ietf.org/html/rfc6962#page-14
+	SCTListOID = asn1.ObjectIdentifier{1, 3, 6, 1, 4, 1, 11129, 2, 4, 2}
+)
+
+func addPolicies(template *sm2.Certificate, policies []config.CertificatePolicy) error {
+	var asn1PolicyList []policyInformation
+
+	for _, policy := range policies {
+		pi := policyInformation{
+			// The PolicyIdentifier is an OID assigned to a given issuer.
+			PolicyIdentifier: asn1.ObjectIdentifier(policy.ID),
+		}
+		for _, qualifier := range policy.Qualifiers {
+			switch qualifier.Type {
+			case "id-qt-unotice":
+				pi.Qualifiers = append(pi.Qualifiers,
+					userNoticePolicyQualifier{
+						PolicyQualifierID: iDQTUserNotice,
+						Qualifier: userNotice{
+							ExplicitText: qualifier.Value,
+						},
+					})
+			case "id-qt-cps":
+				pi.Qualifiers = append(pi.Qualifiers,
+					cpsPolicyQualifier{
+						PolicyQualifierID: iDQTCertificationPracticeStatement,
+						Qualifier:         qualifier.Value,
+					})
+			default:
+				return errors.New("Invalid qualifier type in Policies " + qualifier.Type)
+			}
+		}
+		asn1PolicyList = append(asn1PolicyList, pi)
+	}
+
+	asn1Bytes, err := asn1.Marshal(asn1PolicyList)
+	if err != nil {
+		return err
+	}
+
+	template.ExtraExtensions = append(template.ExtraExtensions, pkix.Extension{
+		Id:       asn1.ObjectIdentifier{2, 5, 29, 32},
+		Critical: false,
+		Value:    asn1Bytes,
+	})
+	return nil
+}
+
+func FillTemplate(template *sm2.Certificate, defaultProfile, profile *config.SigningProfile, notBefore time.Time, notAfter time.Time) error {
+	ski, err := ComputeSKI(template)
+	if err != nil {
+		return err
+	}
+
+	var (
+		eku             []x509.ExtKeyUsage
+		ku              x509.KeyUsage
+		backdate        time.Duration
+		expiry          time.Duration
+		crlURL, ocspURL string
+		issuerURL       = profile.IssuerURL
+	)
+
+	// The third value returned from Usages is a list of unknown key usages.
+	// This should be used when validating the profile at load, and isn't used
+	// here.
+	ku, eku, _ = profile.Usages()
+	sm2eku := make([]sm2.ExtKeyUsage, len(eku))
+
+	for i := 0; i < len(eku); i++ {
+		sm2eku[i] = sm2.ExtKeyUsage(eku[i])
+	}
+
+	if profile.IssuerURL == nil {
+		issuerURL = defaultProfile.IssuerURL
+	}
+
+	if ku == 0 && len(eku) == 0 {
+		return cferr.New(cferr.PolicyError, cferr.NoKeyUsages)
+	}
+
+	if expiry = profile.Expiry; expiry == 0 {
+		expiry = defaultProfile.Expiry
+	}
+
+	if crlURL = profile.CRL; crlURL == "" {
+		crlURL = defaultProfile.CRL
+	}
+	if ocspURL = profile.OCSP; ocspURL == "" {
+		ocspURL = defaultProfile.OCSP
+	}
+
+	if notBefore.IsZero() {
+		if !profile.NotBefore.IsZero() {
+			notBefore = profile.NotBefore
+		} else {
+			if backdate = profile.Backdate; backdate == 0 {
+				backdate = -5 * time.Minute
+			} else {
+				backdate = -1 * profile.Backdate
+			}
+			notBefore = time.Now().Round(time.Minute).Add(backdate)
+		}
+	}
+	notBefore = notBefore.UTC()
+
+	if notAfter.IsZero() {
+		if !profile.NotAfter.IsZero() {
+			notAfter = profile.NotAfter
+		} else {
+			notAfter = notBefore.Add(expiry)
+		}
+	}
+	notAfter = notAfter.UTC()
+
+	template.NotBefore = notBefore
+	template.NotAfter = notAfter
+	template.KeyUsage = sm2.KeyUsage(ku)
+	template.ExtKeyUsage = sm2eku
+	template.BasicConstraintsValid = true
+	template.IsCA = profile.CAConstraint.IsCA
+	if template.IsCA {
+		template.MaxPathLen = profile.CAConstraint.MaxPathLen
+		if template.MaxPathLen == 0 {
+			template.MaxPathLenZero = profile.CAConstraint.MaxPathLenZero
+		}
+		template.DNSNames = nil
+		template.EmailAddresses = nil
+	}
+	template.SubjectKeyId = ski
+
+	if ocspURL != "" {
+		template.OCSPServer = []string{ocspURL}
+	}
+	if crlURL != "" {
+		template.CRLDistributionPoints = []string{crlURL}
+	}
+
+	if len(issuerURL) != 0 {
+		template.IssuingCertificateURL = issuerURL
+	}
+	if len(profile.Policies) != 0 {
+		err = addPolicies(template, profile.Policies)
+		if err != nil {
+			return cferr.Wrap(cferr.PolicyError, cferr.InvalidPolicy, err)
+		}
+	}
+	if profile.OCSPNoCheck {
+		ocspNoCheckExtension := pkix.Extension{
+			Id:       asn1.ObjectIdentifier{1, 3, 6, 1, 5, 5, 7, 48, 1, 5},
+			Critical: false,
+			Value:    []byte{0x05, 0x00},
+		}
+		template.ExtraExtensions = append(template.ExtraExtensions, ocspNoCheckExtension)
+	}
+
+	return nil
+}
+
+func FindProfile(policy *config.Signing, profile string) (*config.SigningProfile, error) {
+	var p *config.SigningProfile
+	if policy != nil && policy.Profiles != nil && profile != "" {
+		p = policy.Profiles[profile]
+	}
+
+	if p == nil && policy != nil {
+		p = policy.Default
+	}
+
+	if p == nil {
+		return nil, cferr.Wrap(cferr.APIClientError, cferr.ClientHTTPError, errors.New("profile must not be nil"))
+	}
+	return p, nil
+}
+
 //生成证书
 func createGmSm2Cert(key bccsp.Key, req *csr.CertificateRequest, priv crypto.Signer) (cert []byte, err error) {
 	log.Infof("xxx xxx in gmca.go  createGmSm2Cert...key :%T", key)
+
+	policy := CAPolicy()
+	if req.CA != nil {
+		if req.CA.Expiry != "" {
+			policy.Default.ExpiryString = req.CA.Expiry
+			policy.Default.Expiry, err = time.ParseDuration(req.CA.Expiry)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		policy.Default.CAConstraint.MaxPathLen = req.CA.PathLength
+		if req.CA.PathLength != 0 && req.CA.PathLenZero == true {
+			log.Infof("ignore invalid 'pathlenzero' value")
+		} else {
+			policy.Default.CAConstraint.MaxPathLenZero = req.CA.PathLenZero
+		}
+	}
+
+	if !policy.Valid() {
+		return nil, cferr.New(cferr.PolicyError, cferr.InvalidPolicy)
+	}
 
 	csrPEM, err := generate(priv, req, key)
 	if err != nil {
@@ -174,6 +451,11 @@ func createGmSm2Cert(key bccsp.Key, req *csr.CertificateRequest, priv crypto.Sig
 	sm2Template, err := parseCertificateRequest(block.Bytes)
 	if err != nil {
 		log.Infof("parseCertificateRequest return err:%s", err)
+		return nil, err
+	}
+
+	err = FillTemplate(sm2Template, policy.Default, policy.Default, time.Time{}, time.Time{})
+	if err != nil {
 		return nil, err
 	}
 
