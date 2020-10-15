@@ -46,9 +46,12 @@ pipeline {
                     make docker-list 2>/dev/null | grep "$DOCKER_NS" | while read line
                     do
                        docker tag $line ${line/:*/:latest}
+
                        docker push $line
                        docker push ${line/:*/:latest}
+
                        docker rmi $line
+                       docker rmi ${line/:*/:latest}
                     done
                     '''
                 }
