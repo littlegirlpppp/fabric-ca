@@ -1042,20 +1042,6 @@ func checkSignature(algo SignatureAlgorithm, signed, signature []byte, publicKey
 			}
 		}
 		return
-	case *PublicKey:
-		sm2Sig := new(sm2Signature)
-		if rest, err := asn1.Unmarshal(signature, sm2Sig); err != nil {
-			return err
-		} else if len(rest) != 0 {
-			return errors.New("x509: trailing data after sm2 signature")
-		}
-		if sm2Sig.R.Sign() <= 0 || sm2Sig.S.Sign() <= 0 {
-			return errors.New("x509: sm2 signature contained zero or negative values")
-		}
-		if !Sm2Verify(pub, signed, nil, sm2Sig.R, sm2Sig.S) {
-			return errors.New("x509: SM2 verification failure")
-		}
-		return
 	}
 	return ErrUnsupportedAlgorithm
 }
@@ -1193,23 +1179,11 @@ func parsePublicKey(algo PublicKeyAlgorithm, keyData *publicKeyInfo) (interface{
 		if x == nil {
 			return nil, errors.New("x509: failed to unmarshal elliptic curve point")
 		}
-
-		var pub interface{}
-
-		if namedCurve == P256Sm2() {
-			pub = &PublicKey{
-				Curve: namedCurve,
-				X:     x,
-				Y:     y,
-			}
-		} else {
-			pub = &ecdsa.PublicKey{
-				Curve: namedCurve,
-				X:     x,
-				Y:     y,
-			}
+		pub := &ecdsa.PublicKey{
+			Curve: namedCurve,
+			X:     x,
+			Y:     y,
 		}
-
 		return pub, nil
 	default:
 		return nil, nil
@@ -2379,7 +2353,7 @@ func CreateCertificateRequest(rand io.Reader, template *CertificateRequest, priv
 
 	digest := tbsCSRContents
 	switch template.SignatureAlgorithm {
-	case SM2WithSM3, SM2WithSHA1, SM2WithSHA256, UnknownSignatureAlgorithm:
+	case SM2WithSM3, SM2WithSHA1, SM2WithSHA256,UnknownSignatureAlgorithm:
 		break
 	default:
 		h := hashFunc.New()
@@ -2420,7 +2394,7 @@ func ParseCertificateRequest(asn1Data []byte) (*CertificateRequest, error) {
 
 func parseCertificateRequest(in *certificateRequest) (*CertificateRequest, error) {
 	out := &CertificateRequest{
-		Raw:                      in.Raw,
+		Raw: in.Raw,
 		RawTBSCertificateRequest: in.TBSCSR.Raw,
 		RawSubjectPublicKeyInfo:  in.TBSCSR.PublicKey.Raw,
 		RawSubject:               in.TBSCSR.Subject.FullBytes,
