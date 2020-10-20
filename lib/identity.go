@@ -13,12 +13,12 @@ import (
 	"strconv"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/api"
-	"github.com/hyperledger/fabric-ca/lib/client/credential"
-	"github.com/hyperledger/fabric-ca/lib/client/credential/idemix"
-	"github.com/hyperledger/fabric-ca/lib/client/credential/x509"
-	"github.com/hyperledger/fabric-ca/lib/common"
-	"github.com/hyperledger/fabric-ca/util"
+	"github.com/tw-bc-group/fabric-ca-gm/api"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/client/credential"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/client/credential/idemix"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/client/credential/x509"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/common"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/pkg/errors"
 )
 

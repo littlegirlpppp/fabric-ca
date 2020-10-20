@@ -7,9 +7,9 @@ SPDX-License-Identifier: Apache-2.0
 package db_test
 
 import (
-	"github.com/hyperledger/fabric-ca/lib/server/db"
-	"github.com/hyperledger/fabric-ca/lib/server/db/mocks"
-	"github.com/hyperledger/fabric/common/metrics/metricsfakes"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/mocks"
+	"github.com/tw-bc-group/fabric-gm/common/metrics/metricsfakes"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

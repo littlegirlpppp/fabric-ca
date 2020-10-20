@@ -13,10 +13,10 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/lib"
-	calog "github.com/hyperledger/fabric-ca/lib/common/log"
-	"github.com/hyperledger/fabric-ca/lib/metadata"
-	"github.com/hyperledger/fabric-ca/util"
+	"github.com/tw-bc-group/fabric-ca-gm/lib"
+	calog "github.com/tw-bc-group/fabric-ca-gm/lib/common/log"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/metadata"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/pkg/errors"
 )
 

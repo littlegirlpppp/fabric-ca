@@ -10,9 +10,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/hyperledger/fabric-ca/lib/server/db"
-	"github.com/hyperledger/fabric-ca/lib/server/db/mocks"
-	"github.com/hyperledger/fabric-ca/lib/server/db/util"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/mocks"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

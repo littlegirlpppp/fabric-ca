@@ -575,11 +575,11 @@ func (hs *serverHandshakeState) doFullHandshake() error {
 			}
 			switch key.Curve {
 			case sm2.P256Sm2():
-				if !sm2.Verify(&sm2.PublicKey{
+				if !sm2.Sm2Verify(&sm2.PublicKey{
 					X:     key.X,
 					Y:     key.Y,
 					Curve: key.Curve,
-				}, digest, ecdsaSig.R, ecdsaSig.S) {
+				}, digest, nil, ecdsaSig.R, ecdsaSig.S) {
 					err = errors.New("tls: SM2 verification failure")
 				}
 			default:
@@ -779,7 +779,7 @@ func (hs *serverHandshakeState) processCertsFromClient(certificates [][]byte) (c
 
 	var pub crypto.PublicKey
 	switch key := certs[0].PublicKey.(type) {
-	case *ecdsa.PublicKey, *rsa.PublicKey, *sm2.PublicKey:
+	case *ecdsa.PublicKey, *rsa.PublicKey:
 		pub = key
 	default:
 		c.sendAlert(alertUnsupportedCertificate)

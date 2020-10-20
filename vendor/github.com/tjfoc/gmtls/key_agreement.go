@@ -414,7 +414,7 @@ func (ka *ecdheKeyAgreement) processServerKeyExchange(config *Config, clientHell
 	}
 	switch ka.sigType {
 	case signatureECDSA:
-		pubKey, ok := cert.PublicKey.(*sm2.PublicKey)
+		pubKey, ok := cert.PublicKey.(*ecdsa.PublicKey)
 		if !ok {
 			return errors.New("tls: ECDHE ECDSA requires a ECDSA server public key")
 		}
@@ -427,16 +427,20 @@ func (ka *ecdheKeyAgreement) processServerKeyExchange(config *Config, clientHell
 		}
 		switch pubKey.Curve {
 		case sm2.P256Sm2():
-			if !sm2.Verify(&sm2.PublicKey{
+			sm2pub := &sm2.PublicKey{
 				X:     pubKey.X,
 				Y:     pubKey.Y,
 				Curve: pubKey.Curve,
-			}, digest, ecdsaSig.R, ecdsaSig.S) {
+			}
+			if !sm2.Sm2Verify(sm2pub, digest, nil, ecdsaSig.R, ecdsaSig.S) {
 				return errors.New("tls: SM2 verification failure")
 			}
+			// if !sm2.Verify(, digest, ecdsaSig.R, ecdsaSig.S) {
+			// 	return errors.New("tls: SM2 verification failure")
+			// }
 		default:
-			if !sm2.Verify(pubKey, digest, ecdsaSig.R, ecdsaSig.S) {
-				return errors.New("tls: ECDSA-->SM2 verification failure")
+			if !ecdsa.Verify(pubKey, digest, ecdsaSig.R, ecdsaSig.S) {
+				return errors.New("tls: ECDSA verification failure")
 			}
 		}
 	case signatureRSA:

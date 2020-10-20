@@ -12,8 +12,8 @@ import (
 	"time"
 
 	"github.com/cloudflare/cfssl/certdb"
-	"github.com/hyperledger/fabric-ca/lib/server/db/util"
-	"github.com/hyperledger/fabric/common/metrics"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
+	"github.com/tw-bc-group/fabric-gm/common/metrics"
 	"github.com/jmoiron/sqlx"
 )
 

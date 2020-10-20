@@ -28,7 +28,7 @@
 #   - dist-clean - cleans release packages for all target platforms
 #   - clean-all - cleans the build area and release packages
 
-PROJECT_NAME = fabric-ca
+PROJECT_NAME = fabric-ca-gm
 BASE_VERSION = 1.4.2
 PREV_VERSION = 1.4.1
 IS_RELEASE = false
@@ -53,7 +53,7 @@ PGVER=9.5
 endif
 
 BASEIMAGE_RELEASE = 0.4.15
-PKGNAME = github.com/hyperledger/$(PROJECT_NAME)
+PKGNAME = github.com/tw-bc-group/$(PROJECT_NAME)
 
 METADATA_VAR = Version=$(PROJECT_VERSION)
 
@@ -117,9 +117,12 @@ bin/%: $(GO_SOURCE)
 	@mkdir -p bin && go build -o bin/${@F} -tags "pkcs11" -ldflags "$(GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
 	@echo "Built bin/${@F}"
 
+vendor:
+	go mod vendor
+
 # We (re)build a package within a docker context but persist the $GOPATH/pkg
 # directory so that subsequent builds are faster
-build/docker/bin/%:
+build/docker/bin/%: vendor
 	@echo "Building $@"
 	@mkdir -p $(@D) build/docker/$(@F)/pkg
 	@$(DRUN) \
@@ -131,7 +134,7 @@ build/docker/bin/%:
 
 build/image/%/$(DUMMY): Makefile build/image/%/payload
 	$(eval TARGET = ${patsubst build/image/%/$(DUMMY),%,${@}})
-	$(eval DOCKER_NAME = $(DOCKER_NS)/$(TARGET)-gm)
+	$(eval DOCKER_NAME = $(DOCKER_NS)/$(TARGET))
 	@echo "Building docker $(TARGET) image"
 	@cat images/$(TARGET)/Dockerfile.in \
 		| sed -e 's|_BASE_NS_|$(BASE_DOCKER_NS)|g' \
@@ -147,7 +150,7 @@ build/image/%/$(DUMMY): Makefile build/image/%/payload
 	docker tag $(DOCKER_NAME) $(DOCKER_NAME):$(DOCKER_TAG)
 	@touch $@
 
-build/image/fabric-ca/payload: \
+build/image/fabric-ca-gm/payload: \
 	build/docker/bin/fabric-ca-client \
 	build/docker/bin/fabric-ca-server \
 	build/fabric-ca.tar.bz2
@@ -160,7 +163,7 @@ build/image/%/payload:
 	mkdir -p $@
 	cp $^ $@
 
-build/fabric-ca.tar.bz2: $(shell git ls-files images/fabric-ca/payload)
+build/fabric-ca.tar.bz2: $(shell git ls-files images/$(PROJECT_NAME)/payload)
 
 build/fabric-ca-fvt.tar.bz2: $(shell find images/fabric-ca-fvt/payload/ -maxdepth 1)
 
@@ -224,19 +227,19 @@ ci-tests: docker-clean all-tests docker-fvt docs
 
 %-docker-list:
 	$(eval TARGET = ${patsubst %-docker-list,%,${@}})
-	@echo $(DOCKER_NS)/$(TARGET)-gm:$(DOCKER_TAG)
+	@echo $(DOCKER_NS)/$(TARGET):$(DOCKER_TAG)
 
 docker-list: $(patsubst %,%-docker-list, $(IMAGES))
 
 %-docker-clean:
 	$(eval TARGET = ${patsubst %-docker-clean,%,${@}})
 	-docker images -q $(DOCKER_NS)/$(TARGET):latest | xargs -I '{}' docker rmi -f '{}'
-	-docker images -q $(DOCKER_NS)/$(TARGET)-gm:latest | xargs -I '{}' docker rmi -f '{}'
+	-docker images -q $(DOCKER_NS)/$(TARGET):latest | xargs -I '{}' docker rmi -f '{}'
 	-docker images -q $(NEXUS_URL)/*:$(STABLE_TAG) | xargs -I '{}' docker rmi -f '{}'
 	-@rm -rf build/image/$(TARGET) ||:
 
 docker-clean: $(patsubst %,%-docker-clean, $(IMAGES) $(PROJECT_NAME)-fvt)
-	@rm -rf build/docker/bin/* ||:
+	@rm -rf build/docker/bin/* vendor ||:
 
 native: fabric-ca-client fabric-ca-server
 

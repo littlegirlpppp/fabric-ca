@@ -23,11 +23,11 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/tjfoc/fabric-ca-gm/util"
-	"github.com/hyperledger/fabric/bccsp"
-	"github.com/hyperledger/fabric/bccsp/factory"
 	"github.com/tjfoc/gmsm/sm2"
 	gtls "github.com/tjfoc/gmtls"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
+	"github.com/tw-bc-group/fabric-gm/bccsp"
+	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 )
 
 // ServerTLSConfig defines key material for a TLS server

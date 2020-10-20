@@ -15,10 +15,10 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/hyperledger/fabric-ca/lib/server/operations"
-	"github.com/hyperledger/fabric/common/metrics/disabled"
-	"github.com/hyperledger/fabric/common/metrics/prometheus"
-	"github.com/hyperledger/fabric/common/metrics/statsd"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/operations"
+	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
+	"github.com/tw-bc-group/fabric-gm/common/metrics/prometheus"
+	"github.com/tw-bc-group/fabric-gm/common/metrics/statsd"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

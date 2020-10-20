@@ -15,11 +15,11 @@ import (
 	"testing"
 
 	fp256bn "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
-	. "github.com/hyperledger/fabric-ca/lib/server/idemix"
-	"github.com/hyperledger/fabric-ca/lib/server/idemix/mocks"
-	dmocks "github.com/hyperledger/fabric-ca/lib/server/idemix/mocks"
-	"github.com/hyperledger/fabric-ca/util"
-	"github.com/hyperledger/fabric/idemix"
+	. "github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix/mocks"
+	dmocks "github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix/mocks"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
+	"github.com/tw-bc-group/fabric-gm/idemix"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )

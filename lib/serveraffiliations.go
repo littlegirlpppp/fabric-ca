@@ -12,14 +12,14 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/api"
-	"github.com/hyperledger/fabric-ca/lib/attr"
-	"github.com/hyperledger/fabric-ca/lib/caerrors"
-	"github.com/hyperledger/fabric-ca/lib/server/db"
-	"github.com/hyperledger/fabric-ca/lib/server/db/util"
-	"github.com/hyperledger/fabric-ca/lib/server/user"
-	cadbuser "github.com/hyperledger/fabric-ca/lib/server/user"
-	"github.com/hyperledger/fabric-ca/lib/spi"
+	"github.com/tw-bc-group/fabric-ca-gm/api"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/attr"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
+	cadbuser "github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/spi"
 	"github.com/pkg/errors"
 )
 

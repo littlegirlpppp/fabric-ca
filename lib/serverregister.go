@@ -11,11 +11,11 @@ import (
 	"net/url"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/api"
-	"github.com/hyperledger/fabric-ca/lib/attr"
-	"github.com/hyperledger/fabric-ca/lib/caerrors"
-	"github.com/hyperledger/fabric-ca/lib/server/user"
-	"github.com/hyperledger/fabric-ca/util"
+	"github.com/tw-bc-group/fabric-ca-gm/api"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/attr"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/pkg/errors"
 )
 

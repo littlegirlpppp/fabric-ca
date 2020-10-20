@@ -25,12 +25,12 @@ import (
 	"github.com/cloudflare/cfssl/certdb"
 	"github.com/cloudflare/cfssl/csr"
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric/bccsp"
-	"github.com/hyperledger/fabric/bccsp/gm"
+	"github.com/tw-bc-group/fabric-gm/bccsp"
+	"github.com/tw-bc-group/fabric-gm/bccsp/gm"
 	"github.com/tjfoc/gmsm/sm2"
 
 	"github.com/cloudflare/cfssl/signer"
-	"github.com/hyperledger/fabric-ca/util"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
 )
 
 // add by thoughtwork's matrix

@@ -12,7 +12,7 @@ import (
 	"io/ioutil"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/util"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/pkg/errors"
 	"github.com/tjfoc/gmsm/sm2"
 )

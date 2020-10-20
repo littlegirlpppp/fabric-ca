@@ -18,7 +18,7 @@ package api
 
 import (
 	"github.com/cloudflare/cfssl/signer"
-	"github.com/hyperledger/fabric/idemix"
+	"github.com/tw-bc-group/fabric-gm/idemix"
 )
 
 /*

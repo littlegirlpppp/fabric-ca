@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/lib/server/db"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/kisielk/sqlstruct"
 	"github.com/pkg/errors"
 )

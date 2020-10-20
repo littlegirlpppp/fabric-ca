@@ -18,10 +18,10 @@ import (
 	kitstatsd "github.com/go-kit/kit/metrics/statsd"
 	"github.com/gorilla/mux"
 	"github.com/hyperledger/fabric-lib-go/healthz"
-	"github.com/hyperledger/fabric/common/metrics"
-	"github.com/hyperledger/fabric/common/metrics/disabled"
-	"github.com/hyperledger/fabric/common/metrics/prometheus"
-	"github.com/hyperledger/fabric/common/metrics/statsd"
+	"github.com/tw-bc-group/fabric-gm/common/metrics"
+	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
+	"github.com/tw-bc-group/fabric-gm/common/metrics/prometheus"
+	"github.com/tw-bc-group/fabric-gm/common/metrics/statsd"
 	prom "github.com/prometheus/client_golang/prometheus"
 )
 

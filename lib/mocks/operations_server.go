@@ -5,7 +5,7 @@ import (
 	sync "sync"
 
 	healthz "github.com/hyperledger/fabric-lib-go/healthz"
-	metrics "github.com/hyperledger/fabric/common/metrics"
+	metrics "github.com/tw-bc-group/fabric-gm/common/metrics"
 )
 
 type OperationsServer struct {

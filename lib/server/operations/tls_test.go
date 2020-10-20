@@ -13,7 +13,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/hyperledger/fabric-ca/lib/server/operations"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/operations"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

@@ -10,9 +10,9 @@ import (
 	"crypto/x509"
 	"fmt"
 
-	"github.com/hyperledger/fabric-ca/util"
-	"github.com/hyperledger/fabric/bccsp"
-	"github.com/hyperledger/fabric/common/attrmgr"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
+	"github.com/tw-bc-group/fabric-gm/bccsp"
+	"github.com/tw-bc-group/fabric-gm/common/attrmgr"
 	"github.com/pkg/errors"
 )
 

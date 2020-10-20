@@ -35,7 +35,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hyperledger/fabric/bccsp/factory"
+	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"

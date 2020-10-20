@@ -13,10 +13,10 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/lib/server/db"
-	"github.com/hyperledger/fabric-ca/lib/server/db/util"
-	"github.com/hyperledger/fabric-ca/lib/tls"
-	"github.com/hyperledger/fabric/common/metrics"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/tls"
+	"github.com/tw-bc-group/fabric-gm/common/metrics"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq" // import to support Postgres
 	"github.com/pkg/errors"

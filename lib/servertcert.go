@@ -7,10 +7,10 @@ SPDX-License-Identifier: Apache-2.0
 package lib
 
 import (
-	"github.com/hyperledger/fabric-ca/api"
-	"github.com/hyperledger/fabric-ca/lib/caerrors"
-	tcert "github.com/hyperledger/fabric-ca/lib/tcert"
-	"github.com/hyperledger/fabric/bccsp"
+	"github.com/tw-bc-group/fabric-ca-gm/api"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
+	tcert "github.com/tw-bc-group/fabric-ca-gm/lib/tcert"
+	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/pkg/errors"
 )
 

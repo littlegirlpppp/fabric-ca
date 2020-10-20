@@ -31,10 +31,10 @@ import (
 	"time"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/api"
-	"github.com/hyperledger/fabric-ca/util"
-	"github.com/hyperledger/fabric/bccsp"
-	cspsigner "github.com/hyperledger/fabric/bccsp/signer"
+	"github.com/tw-bc-group/fabric-ca-gm/api"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
+	"github.com/tw-bc-group/fabric-gm/bccsp"
+	cspsigner "github.com/tw-bc-group/fabric-gm/bccsp/signer"
 )
 
 var (
