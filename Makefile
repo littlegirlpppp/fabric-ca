@@ -169,7 +169,7 @@ build/fabric-ca-fvt.tar.bz2: $(shell find images/fabric-ca-fvt/payload/ -maxdept
 
 build/%.tar.bz2:
 	@echo "Building $@"
-	@tar -jc -C images/$*/payload $(notdir $^) > $@
+	@tar -jc -C images/$*-gm/payload $(notdir $^) > $@
 
 all-tests: checks fabric-ca-server fabric-ca-client
 	@scripts/run_unit_tests
