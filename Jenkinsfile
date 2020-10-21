@@ -3,6 +3,8 @@ def getRepoURL() {
   return readFile(".git/remote-url").trim()
 }
 
+def projectName = "tw-bc-group/fabric-ca-gm"
+
 void setBuildStatus(String message, String state) {
   repoUrl = getRepoURL()
 
@@ -29,7 +31,7 @@ pipeline {
             steps {
                 setBuildStatus("Build Started", "PENDING");
 
-                dir("src/github.com/hyperledger/fabric-ca") {
+                dir("src/github.com/$projectName") {
                     checkout scm
 
                     sh '''
@@ -40,7 +42,7 @@ pipeline {
         }
         stage('Upload Image') {
             steps {
-                dir("src/github.com/hyperledger/fabric-ca") {
+                dir("src/github.com/$projectName") {
                     sh 'aws ecr get-login-password | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}'
                     sh '''
                     make docker-list 2>/dev/null | grep "$DOCKER_NS" | while read line
@@ -60,7 +62,7 @@ pipeline {
 
         stage('Test Fabcar') {
             steps {
-                dir("src/github.com/hyperledger/fabric-ca") {
+                dir("src/github.com/$projectName") {
                     catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                         script {
                             def result = build(
