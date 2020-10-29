@@ -29,6 +29,7 @@ import (
 	"strings"
 	_ "time" // for ocspSignerFromConfig
 
+	gtls "github.com/Hyperledger-TWGC/tjfoc-gm/gmtls"
 	_ "github.com/cloudflare/cfssl/cli" // for ocspSignerFromConfig
 	"github.com/cloudflare/cfssl/config"
 	"github.com/cloudflare/cfssl/csr"
@@ -37,14 +38,13 @@ import (
 	_ "github.com/cloudflare/cfssl/ocsp" // for ocspSignerFromConfig
 	"github.com/cloudflare/cfssl/signer"
 	"github.com/cloudflare/cfssl/signer/local"
+	"github.com/pkg/errors"
+	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 	"github.com/tw-bc-group/fabric-gm/bccsp/gm"
 	cspsigner "github.com/tw-bc-group/fabric-gm/bccsp/signer"
 	"github.com/tw-bc-group/fabric-gm/bccsp/utils"
-	"github.com/pkg/errors"
-	"github.com/tjfoc/gmsm/sm2"
-	gtls "github.com/tjfoc/gmtls"
 )
 
 // GetDefaultBCCSP returns the default BCCSP

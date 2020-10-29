@@ -17,18 +17,23 @@ limitations under the License.
 package gmtls
 
 import (
+	"github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	"io/ioutil"
 	"time"
 
 	"github.com/pkg/errors"
 
+	gtls "github.com/Hyperledger-TWGC/tjfoc-gm/gmtls"
 	"github.com/cloudflare/cfssl/log"
-	"github.com/tjfoc/gmsm/sm2"
-	gtls "github.com/tjfoc/gmtls"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 )
+
+var DefaultCipherSuites = []uint16{
+	gtls.GMTLS_SM2_WITH_SM4_SM3,
+	gtls.GMTLS_ECDHE_SM2_WITH_SM4_SM3,
+}
 
 // ServerTLSConfig defines key material for a TLS server
 type ServerTLSConfig struct {
@@ -84,7 +89,7 @@ func GetClientTLSConfig(cfg *ClientTLSConfig, csp bccsp.BCCSP) (*gtls.Config, er
 	} else {
 		log.Debug("Client TLS certificate and/or key file not provided")
 	}
-	rootCAPool := sm2.NewCertPool()
+	rootCAPool := x509.NewCertPool()
 	if len(cfg.CertFiles) == 0 {
 		return nil, errors.New("No TLS certificate files were provided")
 	}
@@ -101,6 +106,7 @@ func GetClientTLSConfig(cfg *ClientTLSConfig, csp bccsp.BCCSP) (*gtls.Config, er
 	}
 
 	config := &gtls.Config{
+		GMSupport:    &gtls.GMSupport{},
 		Certificates: certs,
 		RootCAs:      rootCAPool,
 	}

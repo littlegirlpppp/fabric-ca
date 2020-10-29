@@ -9,14 +9,14 @@ package x509
 import (
 	"encoding/hex"
 	"fmt"
-	"net/http"
 
 	"github.com/cloudflare/cfssl/log"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/client/credential"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
-	"github.com/pkg/errors"
+	"github.com/tw-bc-group/net-go-gm/http"
 )
 
 const (

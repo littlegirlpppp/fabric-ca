@@ -3,13 +3,14 @@ module github.com/tw-bc-group/fabric-ca-gm
 go 1.15
 
 require (
+	github.com/Hyperledger-TWGC/tjfoc-gm v0.0.0-20201027032413-de75d571dd85
 	github.com/Knetic/govaluate v3.0.1-0.20170926212237-aa73cfd04eeb+incompatible
 	github.com/cloudflare/cfssl v0.0.0-20170916000929-7d88da830aad
 	github.com/felixge/httpsnoop v1.0.0
 	github.com/go-kit/kit v0.8.1-0.20190102110407-aed320776b71
 	github.com/go-logfmt/logfmt v0.4.0 // indirect
 	github.com/go-sql-driver/mysql v1.4.1-0.20190510102335-877a9775f068
-	github.com/golang/protobuf v1.4.0
+	github.com/golang/protobuf v1.4.2
 	github.com/google/certificate-transparency-go v1.0.21 // indirect
 	github.com/gorilla/handlers v1.4.0
 	github.com/gorilla/mux v1.6.3-0.20181228004216-ef912dd76ebe
@@ -43,11 +44,12 @@ require (
 	github.com/spf13/viper v1.0.1-0.20171207042631-1a0c4a370c3e
 	github.com/stretchr/testify v1.5.1
 	github.com/tjfoc/gmsm v1.3.2
-	github.com/tjfoc/gmtls v1.2.1
 	github.com/tw-bc-group/fabric-gm v0.0.0-20201020094243-79d18bdf084c
-	golang.org/x/crypto v0.0.0-20200406173513-056763e48d71
+	github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa
+	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de
 	gopkg.in/asn1-ber.v1 v1.0.0-20150924051756-4e86f4367175 // indirect
 	gopkg.in/fsnotify/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/ldap.v2 v2.5.0
 	gopkg.in/yaml.v2 v2.2.8
 )
+

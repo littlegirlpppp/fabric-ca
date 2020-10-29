@@ -29,7 +29,6 @@ import (
 	"io/ioutil"
 	"math/big"
 	mrand "math/rand"
-	"net/http"
 	"net/url"
 	"os"
 	"path"
@@ -41,11 +40,12 @@ import (
 	"time"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/tjfoc/gmsm/sm2"
+	"github.com/tw-bc-group/fabric-gm/bccsp"
+	"github.com/tw-bc-group/net-go-gm/http"
 	"golang.org/x/crypto/ocsp"
 )
 

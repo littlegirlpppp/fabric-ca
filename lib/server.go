@@ -10,7 +10,6 @@ import (
 	"context"
 	"encoding/pem"
 	"fmt"
-	"github.com/cloudflare/cfssl/signer"
 	"io"
 	"io/ioutil"
 	"net"
@@ -23,11 +22,17 @@ import (
 	"sync"
 	"time"
 
+	tls "github.com/Hyperledger-TWGC/tjfoc-gm/gmtls"
+	"github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	"github.com/cloudflare/cfssl/log"
 	"github.com/cloudflare/cfssl/revoke"
+	"github.com/cloudflare/cfssl/signer"
 	"github.com/felixge/httpsnoop"
 	ghandlers "github.com/gorilla/handlers"
 	gmux "github.com/gorilla/mux"
+	"github.com/hyperledger/fabric-lib-go/healthz"
+	"github.com/pkg/errors"
+	"github.com/spf13/viper"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/attr"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
 	calog "github.com/tw-bc-group/fabric-ca-gm/lib/common/log"
@@ -35,15 +40,10 @@ import (
 	dbutil "github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 	cametrics "github.com/tw-bc-group/fabric-ca-gm/lib/server/metrics"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/operations"
-	stls "github.com/tw-bc-group/fabric-ca-gm/lib/tls"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/gmtls"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/hyperledger/fabric-lib-go/healthz"
 	"github.com/tw-bc-group/fabric-gm/bccsp/gm"
 	"github.com/tw-bc-group/fabric-gm/common/metrics"
-	"github.com/pkg/errors"
-	"github.com/spf13/viper"
-	"github.com/tjfoc/gmsm/sm2"
-	tls "github.com/tjfoc/gmtls"
 )
 
 const (
@@ -649,7 +649,7 @@ func (s *Server) listenAndServe() (err error) {
 			return errors.New("Invalid client auth type provided")
 		}
 
-		var certPool *sm2.CertPool
+		var certPool *x509.CertPool
 		if authType != defaultClientAuth {
 			certPool, err = LoadPEMCertPool(c.TLS.ClientAuth.CertFiles)
 			if err != nil {
@@ -658,12 +658,10 @@ func (s *Server) listenAndServe() (err error) {
 		}
 
 		config := &tls.Config{
-			Certificates: []tls.Certificate{*cer},
+			GMSupport:    &tls.GMSupport{},
+			Certificates: []tls.Certificate{*cer, *cer},
 			ClientAuth:   clientAuth,
 			ClientCAs:    certPool,
-			MinVersion:   tls.VersionTLS12,
-			MaxVersion:   tls.VersionTLS12,
-			CipherSuites: stls.DefaultCipherSuites,
 		}
 
 		listener, err = tls.Listen("tcp", addr, config)
@@ -759,7 +757,7 @@ func (s *Server) checkAndEnableProfiling() error {
 // Make all file names in the config absolute
 func (s *Server) makeFileNamesAbsolute() error {
 	log.Debug("Making server filenames absolute")
-	err := stls.AbsTLSServer(&s.Config.TLS, s.HomeDir)
+	err := gmtls.AbsTLSServer(&s.Config.TLS, s.HomeDir)
 	if err != nil {
 		return err
 	}

@@ -13,19 +13,19 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 
+	tls "github.com/Hyperledger-TWGC/tjfoc-gm/gmtls"
+	sm2 "github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	"github.com/cloudflare/cfssl/log"
 	"github.com/grantae/certinfo"
-	"github.com/tw-bc-group/fabric-ca-gm/api"
-	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
-	"github.com/tjfoc/gmsm/sm2"
-	tls "github.com/tjfoc/gmtls"
+	"github.com/tw-bc-group/fabric-ca-gm/api"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
+	"github.com/tw-bc-group/net-go-gm/http"
 )
 
 var clientAuthTypes = map[string]tls.ClientAuthType{

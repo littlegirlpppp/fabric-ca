@@ -7,14 +7,15 @@ SPDX-License-Identifier: Apache-2.0
 package lib
 
 import (
+	"github.com/tw-bc-group/fabric-ca-gm/lib/tls"
 	"time"
 
 	"github.com/cloudflare/cfssl/config"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/gmtls"
 	dbutil "github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/ldap"
-	"github.com/tw-bc-group/fabric-ca-gm/lib/tls"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 )
@@ -165,7 +166,7 @@ type ParentServer struct {
 // enrollment request for an intermetiate CA
 type IntermediateCA struct {
 	ParentServer ParentServer
-	TLS          tls.ClientTLSConfig
+	TLS          gmtls.ClientTLSConfig
 	Enrollment   api.EnrollmentRequest
 }
 

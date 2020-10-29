@@ -29,6 +29,8 @@ import (
 	"github.com/cloudflare/cfssl/log"
 	"github.com/cloudflare/cfssl/signer"
 	cflocalsigner "github.com/cloudflare/cfssl/signer/local"
+	"github.com/pkg/errors"
+	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/attr"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
@@ -51,8 +53,6 @@ import (
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/bccsp/gm"
 	"github.com/tw-bc-group/fabric-gm/common/attrmgr"
-	"github.com/pkg/errors"
-	"github.com/tjfoc/gmsm/sm2"
 )
 
 const (

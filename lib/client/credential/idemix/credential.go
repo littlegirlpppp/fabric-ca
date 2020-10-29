@@ -9,17 +9,17 @@ package idemix
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 
 	"github.com/cloudflare/cfssl/log"
 	"github.com/golang/protobuf/proto"
 	fp256bn "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/common"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	idemix "github.com/tw-bc-group/fabric-gm/idemix"
-	"github.com/pkg/errors"
+	"github.com/tw-bc-group/net-go-gm/http"
 )
 
 const (

@@ -9,17 +9,17 @@ package lib
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"strconv"
 
 	"github.com/cloudflare/cfssl/log"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/client/credential"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/client/credential/idemix"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/client/credential/x509"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/common"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/pkg/errors"
+	"github.com/tw-bc-group/net-go-gm/http"
 )
 
 // Identity is fabric-ca's implementation of an identity
