@@ -44,17 +44,11 @@ require (
 	github.com/spf13/viper v1.0.1-0.20171207042631-1a0c4a370c3e
 	github.com/stretchr/testify v1.5.1
 	github.com/tjfoc/gmsm v1.3.2
-	github.com/tw-bc-group/fabric-gm v0.0.0-20201020094243-79d18bdf084c
+	github.com/tw-bc-group/fabric-gm v0.0.0-20201030081954-2a38b1eb3e87
 	github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa
 	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de
 	gopkg.in/asn1-ber.v1 v1.0.0-20150924051756-4e86f4367175 // indirect
 	gopkg.in/fsnotify/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/ldap.v2 v2.5.0
 	gopkg.in/yaml.v2 v2.2.8
-)
-
-replace (
-	github.com/tw-bc-group/fabric-gm v0.0.0-20201020094243-79d18bdf084c => ../fabric-gm
-	github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa => ../net-go-gm
-	github.com/Hyperledger-TWGC/tjfoc-gm v0.0.0-20201027032413-de75d571dd85 => ../tjfoc-gm
 )

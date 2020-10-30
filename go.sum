@@ -252,6 +252,8 @@ github.com/tjfoc/gmtls v1.2.1/go.mod h1:+mIfCjj3QuRGrW527hj12JLjI6DTt2MvBDxb3/86
 github.com/tmc/grpc-websocket-proxy v0.0.0-20170815181823-89b8d40f7ca8/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/tw-bc-group/fabric-gm v0.0.0-20201020094243-79d18bdf084c h1:t8x/iCx7cgMTCdDLpEshupVQ/CtU1ZOU0+sxtKsYW2E=
 github.com/tw-bc-group/fabric-gm v0.0.0-20201020094243-79d18bdf084c/go.mod h1:gJb66I64wonMJy4WqTHdaBHZcpF2WZeIPcdb4FoWaS8=
+github.com/tw-bc-group/fabric-gm v0.0.0-20201030081954-2a38b1eb3e87 h1:bd1l1tWsGygIFJBfU4CsQusC6c2L9q78hBUnqQh2KDc=
+github.com/tw-bc-group/fabric-gm v0.0.0-20201030081954-2a38b1eb3e87/go.mod h1:gJb66I64wonMJy4WqTHdaBHZcpF2WZeIPcdb4FoWaS8=
 github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa h1:fCeVBt9bkKzOejVk+1TEIgluFyuKSmLoFR7jH5L+QXo=
 github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa/go.mod h1:2oAK+CcT1dFBZ+8KVNJdBUbrcGo2+eniuu24WBQt5JU=
 github.com/ugorji/go v1.1.1/go.mod h1:hnLbHMwcvSihnDhEfx2/BzKp2xb0Y+ErdfYcrs9tkJQ=
