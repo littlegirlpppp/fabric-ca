@@ -18,7 +18,8 @@ testdata/ec_cert.pem
 /release/linux-s390x
 /release/linux-ppc64le
 /release/windows-amd64
-vendor/github.com/cloudflare/cfssl/vendor/github.com/cloudflare/cfssl_trust/ca-bundle/http:*.crt
+
+vendor/
 # tox
 .tox/
 .idea/
