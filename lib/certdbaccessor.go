@@ -15,14 +15,14 @@ import (
 	"github.com/cloudflare/cfssl/certdb"
 	certsql "github.com/cloudflare/cfssl/certdb/sql"
 	"github.com/cloudflare/cfssl/log"
+	"github.com/jmoiron/sqlx"
+	"github.com/kisielk/sqlstruct"
+	"github.com/pkg/errors"
 	cr "github.com/tw-bc-group/fabric-ca-gm/lib/server/certificaterequest"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	cadb "github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	dbutil "github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/jmoiron/sqlx"
-	"github.com/kisielk/sqlstruct"
-	"github.com/pkg/errors"
 )
 
 const (

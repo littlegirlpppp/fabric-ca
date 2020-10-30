@@ -11,9 +11,9 @@ import (
 
 	"github.com/cloudflare/cfssl/log"
 	proto "github.com/golang/protobuf/proto"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/idemix"
-	"github.com/pkg/errors"
 )
 
 const (

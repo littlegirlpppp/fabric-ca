@@ -13,10 +13,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/certificaterequest/mocks"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestCertificateRequest(t *testing.T) {

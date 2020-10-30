@@ -15,13 +15,13 @@ import (
 
 	"github.com/cloudflare/cfssl/log"
 	"github.com/gorilla/mux"
+	"github.com/jmoiron/sqlx"
+	. "github.com/onsi/gomega"
+	"github.com/stretchr/testify/assert"
 	cadb "github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/metrics"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/metricsfakes"
-	"github.com/jmoiron/sqlx"
-	. "github.com/onsi/gomega"
-	"github.com/stretchr/testify/assert"
 )
 
 const (

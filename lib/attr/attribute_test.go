@@ -9,9 +9,9 @@ package attr
 import (
 	"testing"
 
-	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/tw-bc-group/fabric-ca-gm/api"
 )
 
 type testUser struct {

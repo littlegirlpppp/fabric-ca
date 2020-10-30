@@ -11,12 +11,12 @@ import (
 	"net/url"
 
 	"github.com/cloudflare/cfssl/log"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/attr"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/pkg/errors"
 )
 
 func newRegisterEndpoint(s *Server) *serverEndpoint {

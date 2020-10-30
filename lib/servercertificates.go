@@ -12,11 +12,11 @@ import (
 	"os"
 
 	"github.com/cloudflare/cfssl/log"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/certificaterequest"
 	cadbuser "github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/pkg/errors"
 )
 
 type certPEM struct {

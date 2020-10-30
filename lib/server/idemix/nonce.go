@@ -12,10 +12,10 @@ import (
 
 	"github.com/cloudflare/cfssl/log"
 	fp256bn "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/idemix"
-	"github.com/pkg/errors"
 )
 
 const (

@@ -36,11 +36,11 @@ import (
 	"github.com/tw-bc-group/fabric-ca-gm/lib/attr"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
 	calog "github.com/tw-bc-group/fabric-ca-gm/lib/common/log"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/gmtls"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/metadata"
 	dbutil "github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 	cametrics "github.com/tw-bc-group/fabric-ca-gm/lib/server/metrics"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/operations"
-	"github.com/tw-bc-group/fabric-ca-gm/lib/gmtls"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp/gm"
 	"github.com/tw-bc-group/fabric-gm/common/metrics"
@@ -633,7 +633,17 @@ func (s *Server) listenAndServe() (err error) {
 			}
 		}
 
-		cer, err := util.LoadX509KeyPairSM2(c.TLS.CertFile, c.TLS.KeyFile, s.csp)
+		bccspKey, cer, err := util.LoadX509KeyPairSM2(c.TLS.CertFile, c.TLS.KeyFile, s.csp)
+		if err != nil {
+			return err
+		}
+
+		bccspKeyBytes, err := bccspKey.Bytes()
+		if err != nil {
+			return err
+		}
+
+		sm2PrivateKey, err := x509.ParsePKCS8UnecryptedPrivateKey(bccspKeyBytes)
 		if err != nil {
 			return err
 		}
@@ -642,7 +652,8 @@ func (s *Server) listenAndServe() (err error) {
 			c.TLS.ClientAuth.Type = defaultClientAuth
 		}
 
-		log.Debugf("Client authentication type requested: %s", c.TLS.ClientAuth.Type)
+		enCer := *cer
+		enCer.PrivateKey = sm2PrivateKey
 
 		authType := strings.ToLower(c.TLS.ClientAuth.Type)
 		if clientAuth, ok = clientAuthTypes[authType]; !ok {
@@ -659,7 +670,7 @@ func (s *Server) listenAndServe() (err error) {
 
 		config := &tls.Config{
 			GMSupport:    &tls.GMSupport{},
-			Certificates: []tls.Certificate{*cer, *cer},
+			Certificates: []tls.Certificate{*cer, enCer},
 			ClientAuth:   clientAuth,
 			ClientCAs:    certPool,
 		}

@@ -14,8 +14,8 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cfssl/api"
-	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
 	"github.com/stretchr/testify/assert"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
 )
 
 var handlerError error

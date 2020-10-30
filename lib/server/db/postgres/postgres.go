@@ -13,13 +13,13 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cfssl/log"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq" // import to support Postgres
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/tls"
 	"github.com/tw-bc-group/fabric-gm/common/metrics"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq" // import to support Postgres
-	"github.com/pkg/errors"
 )
 
 // Postgres defines PostgreSQL database

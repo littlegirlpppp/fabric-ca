@@ -7,9 +7,9 @@ SPDX-License-Identifier: Apache-2.0
 package util_test
 
 import (
-	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 )
 
 var _ = Describe("util", func() {

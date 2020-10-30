@@ -53,3 +53,8 @@ require (
 	gopkg.in/yaml.v2 v2.2.8
 )
 
+replace (
+	github.com/tw-bc-group/fabric-gm v0.0.0-20201020094243-79d18bdf084c => ../fabric-gm
+	github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa => ../net-go-gm
+	github.com/Hyperledger-TWGC/tjfoc-gm v0.0.0-20201027032413-de75d571dd85 => ../tjfoc-gm
+)

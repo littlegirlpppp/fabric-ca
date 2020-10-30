@@ -10,12 +10,12 @@ import (
 	"os"
 	"testing"
 
+	. "github.com/onsi/gomega"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/factory"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/mysql"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/postgres"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/sqlite"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
-	. "github.com/onsi/gomega"
 )
 
 func TestNew(t *testing.T) {

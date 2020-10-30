@@ -28,12 +28,12 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/tw-bc-group/fabric-ca-gm/api"
-	"github.com/tw-bc-group/fabric-ca-gm/lib"
-	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/tjfoc/gmsm/sm2"
+	"github.com/tw-bc-group/fabric-ca-gm/api"
+	"github.com/tw-bc-group/fabric-ca-gm/lib"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
 )
 
 const (

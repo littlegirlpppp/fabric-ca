@@ -13,8 +13,8 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 	"github.com/pkg/errors"
+	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 )
 
 // ConfigureBCCSP configures BCCSP, using

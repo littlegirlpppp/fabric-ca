@@ -11,11 +11,11 @@ import (
 	"errors"
 	"os"
 
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/sqlite"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/sqlite/mocks"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 )
 
 const (

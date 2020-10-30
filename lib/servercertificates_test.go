@@ -18,6 +18,8 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cfssl/certdb"
+	"github.com/pkg/errors"
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/mocks"
@@ -26,8 +28,6 @@ import (
 	dbuser "github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/metricsfakes"
-	"github.com/pkg/errors"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestCertificatesHandler(t *testing.T) {

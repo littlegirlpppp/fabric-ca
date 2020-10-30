@@ -13,13 +13,13 @@ import (
 
 	"github.com/cloudflare/cfssl/log"
 	"github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/tls"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/common/metrics"
-	"github.com/jmoiron/sqlx"
-	"github.com/pkg/errors"
 )
 
 var (

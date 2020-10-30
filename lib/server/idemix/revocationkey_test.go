@@ -14,11 +14,11 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	. "github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix/mocks"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/idemix"
-	"github.com/stretchr/testify/assert"
 )
 
 const (

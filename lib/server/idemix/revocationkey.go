@@ -12,9 +12,9 @@ import (
 	"io/ioutil"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/pkg/errors"
 	"github.com/tjfoc/gmsm/sm2"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
 )
 
 // RevocationKey represents issuer revocation public and private key

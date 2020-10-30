@@ -11,13 +11,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/pkg/errors"
+	"github.com/stretchr/testify/assert"
 	. "github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix/mocks"
 	dmocks "github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix/mocks"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/idemix"
-	"github.com/pkg/errors"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestNewNonceManager(t *testing.T) {

@@ -9,11 +9,11 @@ package user_test
 import (
 	"errors"
 
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/user/mocks"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	"golang.org/x/crypto/bcrypt"
 )
 

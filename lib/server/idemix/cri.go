@@ -8,9 +8,9 @@ package idemix
 
 import (
 	proto "github.com/golang/protobuf/proto"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/pkg/errors"
 )
 
 // CRIRequestHandler is the handler for Idemix CRI (credential revocation information) request

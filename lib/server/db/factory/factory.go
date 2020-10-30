@@ -9,6 +9,7 @@ package factory
 import (
 	"context"
 
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/mysql"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/postgres"
@@ -16,7 +17,6 @@ import (
 	"github.com/tw-bc-group/fabric-ca-gm/lib/tls"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/common/metrics"
-	"github.com/pkg/errors"
 )
 
 // DB is interface that defines the functions on a database

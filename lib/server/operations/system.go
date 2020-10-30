@@ -18,11 +18,11 @@ import (
 	kitstatsd "github.com/go-kit/kit/metrics/statsd"
 	"github.com/gorilla/mux"
 	"github.com/hyperledger/fabric-lib-go/healthz"
+	prom "github.com/prometheus/client_golang/prometheus"
 	"github.com/tw-bc-group/fabric-gm/common/metrics"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/prometheus"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/statsd"
-	prom "github.com/prometheus/client_golang/prometheus"
 )
 
 // System is an operations server that is responsible for metrics and health checks

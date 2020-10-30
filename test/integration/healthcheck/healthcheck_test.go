@@ -14,8 +14,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/tw-bc-group/fabric-ca-gm/lib"
 	"github.com/hyperledger/fabric-lib-go/healthz"
+	"github.com/tw-bc-group/fabric-ca-gm/lib"
 
 	"github.com/stretchr/testify/assert"
 )

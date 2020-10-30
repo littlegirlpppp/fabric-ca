@@ -25,9 +25,9 @@ import (
 	"github.com/cloudflare/cfssl/certdb"
 	"github.com/cloudflare/cfssl/csr"
 	"github.com/cloudflare/cfssl/log"
+	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/bccsp/gm"
-	"github.com/tjfoc/gmsm/sm2"
 
 	"github.com/cloudflare/cfssl/signer"
 	"github.com/tw-bc-group/fabric-ca-gm/util"

@@ -25,13 +25,13 @@ import (
 	"github.com/cloudflare/cfssl/certdb"
 	"github.com/cloudflare/cfssl/config"
 	"github.com/cloudflare/cfssl/log"
+	"github.com/pkg/errors"
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/cmd/fabric-ca-client/command"
 	"github.com/tw-bc-group/fabric-ca-gm/lib"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/metadata"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/pkg/errors"
-	"github.com/stretchr/testify/assert"
 )
 
 const (

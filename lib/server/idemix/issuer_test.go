@@ -16,6 +16,9 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/kisielk/sqlstruct"
+	"github.com/pkg/errors"
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/lib"
 	dbutil "github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 	. "github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix"
@@ -24,9 +27,6 @@ import (
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/idemix"
-	"github.com/kisielk/sqlstruct"
-	"github.com/pkg/errors"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestNewIssuer(t *testing.T) {

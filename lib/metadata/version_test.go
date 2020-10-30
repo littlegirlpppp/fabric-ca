@@ -19,8 +19,8 @@ package metadata_test
 import (
 	"testing"
 
-	"github.com/tw-bc-group/fabric-ca-gm/lib/metadata"
 	"github.com/stretchr/testify/assert"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/metadata"
 )
 
 func TestVersion(t *testing.T) {

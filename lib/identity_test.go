@@ -9,10 +9,10 @@ package lib
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	clientcred "github.com/tw-bc-group/fabric-ca-gm/lib/client/credential"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/client/credential/x509"
-	"github.com/stretchr/testify/assert"
 )
 
 func getIdentity(t *testing.T) *Identity {

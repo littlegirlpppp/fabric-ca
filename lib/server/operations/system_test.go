@@ -15,12 +15,12 @@ import (
 	"path/filepath"
 	"time"
 
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/operations"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/prometheus"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/statsd"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("System", func() {

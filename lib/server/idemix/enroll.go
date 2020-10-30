@@ -14,11 +14,11 @@ import (
 	"github.com/cloudflare/cfssl/log"
 	proto "github.com/golang/protobuf/proto"
 	fp256bn "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/idemix"
-	"github.com/pkg/errors"
 )
 
 // EnrollmentResponse is the idemix enrollment response from the server

@@ -19,10 +19,10 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/metadata"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestGetServerVersion(t *testing.T) {

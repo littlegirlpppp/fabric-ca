@@ -23,11 +23,11 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cfssl/csr"
+	"github.com/stretchr/testify/assert"
 	. "github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-ca-gm/util/mocks"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
-	"github.com/stretchr/testify/assert"
 )
 
 var csp bccsp.BCCSP

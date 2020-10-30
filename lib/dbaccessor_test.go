@@ -12,15 +12,15 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/jmoiron/sqlx"
+	_ "github.com/mattn/go-sqlite3"
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	. "github.com/tw-bc-group/fabric-ca-gm/lib"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/sqlite"
 	cadbuser "github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/mattn/go-sqlite3"
-	"github.com/stretchr/testify/assert"
 )
 
 const (

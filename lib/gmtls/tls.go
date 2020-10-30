@@ -80,7 +80,7 @@ func GetClientTLSConfig(cfg *ClientTLSConfig, csp bccsp.BCCSP) (*gtls.Config, er
 			return nil, err
 		}
 
-		clientCert, err := util.LoadX509KeyPairSM2(cfg.Client.CertFile, cfg.Client.KeyFile, csp)
+		_, clientCert, err := util.LoadX509KeyPairSM2(cfg.Client.CertFile, cfg.Client.KeyFile, csp)
 		if err != nil {
 			return nil, err
 		}

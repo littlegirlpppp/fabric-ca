@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cfssl/certdb"
+	"github.com/jmoiron/sqlx"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 	"github.com/tw-bc-group/fabric-gm/common/metrics"
-	"github.com/jmoiron/sqlx"
 )
 
 //go:generate counterfeiter -o mocks/fabricCaDb.go -fake-name FabricCADB . FabricCADB

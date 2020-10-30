@@ -10,13 +10,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tw-bc-group/fabric-ca-gm/cmd/fabric-ca-client/command/mocks"
-	"github.com/tw-bc-group/fabric-ca-gm/lib"
-	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"github.com/tw-bc-group/fabric-ca-gm/cmd/fabric-ca-client/command/mocks"
+	"github.com/tw-bc-group/fabric-ca-gm/lib"
+	"github.com/tw-bc-group/fabric-ca-gm/util"
 )
 
 // Unit Tests

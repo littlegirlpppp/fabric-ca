@@ -21,11 +21,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tw-bc-group/fabric-ca-gm/lib"
-	. "github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"github.com/tw-bc-group/fabric-ca-gm/lib"
+	. "github.com/tw-bc-group/fabric-ca-gm/util"
 )
 
 // A test struct

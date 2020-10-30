@@ -18,6 +18,7 @@ import (
 	"github.com/cloudflare/cfssl/csr"
 	"github.com/cloudflare/cfssl/log"
 	"github.com/cloudflare/cfssl/signer"
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	cax509 "github.com/tw-bc-group/fabric-ca-gm/lib/client/credential/x509"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/common"
@@ -26,7 +27,6 @@ import (
 	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 	cspsigner "github.com/tw-bc-group/fabric-gm/bccsp/signer"
 	"github.com/tw-bc-group/fabric-gm/bccsp/utils"
-	"github.com/stretchr/testify/assert"
 )
 
 const (

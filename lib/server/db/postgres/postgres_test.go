@@ -10,13 +10,13 @@ import (
 	"context"
 	"path/filepath"
 
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/postgres"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/postgres/mocks"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/tls"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
-	"github.com/pkg/errors"
 )
 
 const (

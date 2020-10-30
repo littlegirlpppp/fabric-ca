@@ -27,6 +27,10 @@ import (
 
 	"github.com/cloudflare/cfssl/certdb"
 	"github.com/cloudflare/cfssl/csr"
+	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/gbytes"
+	"github.com/spf13/viper"
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	. "github.com/tw-bc-group/fabric-ca-gm/lib"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/metadata"
@@ -38,10 +42,6 @@ import (
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
-	. "github.com/onsi/gomega"
-	"github.com/onsi/gomega/gbytes"
-	"github.com/spf13/viper"
-	"github.com/stretchr/testify/assert"
 )
 
 const (

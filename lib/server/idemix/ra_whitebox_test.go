@@ -10,10 +10,10 @@ import (
 	"testing"
 
 	fp256bn "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/idemix"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestGetUnRevokedHandles(t *testing.T) {

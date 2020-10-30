@@ -17,6 +17,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/client/credential"
@@ -24,7 +25,6 @@ import (
 	"github.com/tw-bc-group/fabric-ca-gm/lib/client/credential/x509/mocks"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
-	"github.com/stretchr/testify/assert"
 )
 
 const (

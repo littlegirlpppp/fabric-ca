@@ -20,11 +20,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/tw-bc-group/fabric-ca-gm/cmd/fabric-ca-client/command/mocks"
-	"github.com/tw-bc-group/fabric-ca-gm/lib"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"github.com/tw-bc-group/fabric-ca-gm/cmd/fabric-ca-client/command/mocks"
+	"github.com/tw-bc-group/fabric-ca-gm/lib"
 )
 
 func TestNewGetCACertCmd(t *testing.T) {

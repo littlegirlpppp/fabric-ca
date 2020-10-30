@@ -15,10 +15,10 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	lib "github.com/tw-bc-group/fabric-ca-gm/lib"
 	. "github.com/tw-bc-group/fabric-ca-gm/lib/client/credential/idemix"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix"
-	"github.com/stretchr/testify/assert"
 )
 
 const (

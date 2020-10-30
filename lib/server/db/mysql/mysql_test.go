@@ -11,12 +11,12 @@ import (
 	"errors"
 	"path/filepath"
 
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/mysql"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/mysql/mocks"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/tls"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 )
 
 const (

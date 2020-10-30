@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/kisielk/sqlstruct"
 	"github.com/pkg/errors"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 )
 
 const (

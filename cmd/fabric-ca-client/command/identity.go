@@ -20,12 +20,12 @@ import (
 	"fmt"
 
 	"github.com/cloudflare/cfssl/log"
+	"github.com/pkg/errors"
+	"github.com/spf13/cobra"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib"
 	calog "github.com/tw-bc-group/fabric-ca-gm/lib/common/log"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/pkg/errors"
-	"github.com/spf13/cobra"
 )
 
 type identityArgs struct {

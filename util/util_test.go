@@ -35,10 +35,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 )
 
 func TestMain(m *testing.M) {

@@ -10,11 +10,11 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/jmoiron/sqlx"
+	. "github.com/onsi/gomega"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/mocks"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
-	"github.com/jmoiron/sqlx"
-	. "github.com/onsi/gomega"
 )
 
 func TestTX(t *testing.T) {

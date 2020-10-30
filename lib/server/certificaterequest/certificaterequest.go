@@ -13,8 +13,8 @@ import (
 	"time"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/pkg/errors"
+	"github.com/tw-bc-group/fabric-ca-gm/api"
 )
 
 // CertificateRequest defines the properties of a certificate request

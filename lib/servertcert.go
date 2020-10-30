@@ -7,11 +7,11 @@ SPDX-License-Identifier: Apache-2.0
 package lib
 
 import (
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
 	tcert "github.com/tw-bc-group/fabric-ca-gm/lib/tcert"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
-	"github.com/pkg/errors"
 )
 
 func newTCertEndpoint(s *Server) *serverEndpoint {

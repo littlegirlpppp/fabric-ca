@@ -20,9 +20,9 @@ import (
 	"fmt"
 
 	"github.com/cloudflare/cfssl/log"
+	"github.com/spf13/cobra"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	calog "github.com/tw-bc-group/fabric-ca-gm/lib/common/log"
-	"github.com/spf13/cobra"
 )
 
 type affiliationArgs struct {

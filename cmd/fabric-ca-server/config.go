@@ -13,11 +13,11 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cfssl/log"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/lib"
 	calog "github.com/tw-bc-group/fabric-ca-gm/lib/common/log"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/metadata"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/pkg/errors"
 )
 
 const (

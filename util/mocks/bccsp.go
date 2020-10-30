@@ -19,8 +19,8 @@ package mocks
 import (
 	"hash"
 
-	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/stretchr/testify/mock"
+	"github.com/tw-bc-group/fabric-gm/bccsp"
 )
 
 // BCCSP mocks a BCCSP to be used in the util package

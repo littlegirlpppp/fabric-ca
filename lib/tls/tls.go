@@ -23,10 +23,10 @@ import (
 	"time"
 
 	"github.com/cloudflare/cfssl/log"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
-	"github.com/pkg/errors"
 )
 
 // DefaultCipherSuites is a set of strong TLS cipher suites

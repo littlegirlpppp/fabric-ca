@@ -21,6 +21,8 @@ import (
 	"github.com/cloudflare/cfssl/revoke"
 	"github.com/cloudflare/cfssl/signer"
 	gmux "github.com/gorilla/mux"
+	"github.com/jmoiron/sqlx"
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/attr"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
@@ -29,8 +31,6 @@ import (
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/common/attrmgr"
-	"github.com/jmoiron/sqlx"
-	"github.com/pkg/errors"
 )
 
 // ServerRequestContext defines the functionality of a server request context object

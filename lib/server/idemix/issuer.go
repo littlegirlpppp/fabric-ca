@@ -18,6 +18,8 @@ import (
 	proto "github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-amcl/amcl"
 	fp256bn "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
+	"github.com/pkg/errors"
+	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/common"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
@@ -26,8 +28,6 @@ import (
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/idemix"
-	"github.com/pkg/errors"
-	"github.com/tjfoc/gmsm/sm2"
 )
 
 // Issuer is the interface to the Issuer for external components

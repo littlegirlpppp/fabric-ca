@@ -13,9 +13,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/tw-bc-group/fabric-ca-gm/lib/server/operations"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/tw-bc-group/fabric-ca-gm/lib/server/operations"
 )
 
 var _ = Describe("TLS", func() {

@@ -10,10 +10,10 @@ import (
 	"crypto/x509"
 	"fmt"
 
+	"github.com/pkg/errors"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/common/attrmgr"
-	"github.com/pkg/errors"
 )
 
 // NewSigner is constructor for Signer

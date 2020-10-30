@@ -247,6 +247,7 @@ func GetSignerFromSM2Cert(cert *sm2.Certificate, csp bccsp.BCCSP) (bccsp.Key, cr
 // GetSignerFromCertFile load skiFile and load private key represented by ski and return bccsp signer that conforms to crypto.Signer
 func GetSignerFromCertFile(certFile string, csp bccsp.BCCSP) (bccsp.Key, crypto.Signer, *x509.Certificate, error) {
 	var cert *x509.Certificate
+	log.Debugf("GetSignerFromCertFile, certFile: %s", certFile)
 	// Load cert file
 	certBytes, err := ioutil.ReadFile(certFile)
 	if err != nil {
@@ -387,11 +388,11 @@ func LoadX509KeyPair(certFile, keyFile string, csp bccsp.BCCSP) (*tls.Certificat
 	return cert, nil
 }
 
-func LoadX509KeyPairSM2(certFile, keyFile string, csp bccsp.BCCSP) (*gtls.Certificate, error) {
+func LoadX509KeyPairSM2(certFile, keyFile string, csp bccsp.BCCSP) (bccsp.Key, *gtls.Certificate, error) {
 
 	certPEMBlock, err := ioutil.ReadFile(certFile)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	cert := &gtls.Certificate{}
@@ -411,35 +412,36 @@ func LoadX509KeyPairSM2(certFile, keyFile string, csp bccsp.BCCSP) (*gtls.Certif
 
 	if len(cert.Certificate) == 0 {
 		if len(skippedBlockTypes) == 0 {
-			return nil, errors.Errorf("Failed to find PEM block in file %s", certFile)
+			return nil, nil, errors.Errorf("Failed to find PEM block in file %s", certFile)
 		}
 		if len(skippedBlockTypes) == 1 && strings.HasSuffix(skippedBlockTypes[0], "PRIVATE KEY") {
-			return nil, errors.Errorf("Failed to find certificate PEM data in file %s, but did find a private key; PEM inputs may have been switched", certFile)
+			return nil, nil, errors.Errorf("Failed to find certificate PEM data in file %s, but did find a private key; PEM inputs may have been switched", certFile)
 		}
-		return nil, errors.Errorf("Failed to find \"CERTIFICATE\" PEM block in file %s after skipping PEM blocks of the following types: %v", certFile, skippedBlockTypes)
+		return nil, nil, errors.Errorf("Failed to find \"CERTIFICATE\" PEM block in file %s after skipping PEM blocks of the following types: %v", certFile, skippedBlockTypes)
 	}
 
 	sm2Cert, err := sm2.ParseCertificate(cert.Certificate[0])
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	x509Cert := gm.ParseSm2Certificate2X509(sm2Cert)
-	_, cert.PrivateKey, err = GetSignerFromCert(x509Cert, csp)
+	var privateKey bccsp.Key
+	privateKey, cert.PrivateKey, err = GetSignerFromCert(x509Cert, csp)
 	if err != nil {
 		if keyFile != "" {
 			log.Debugf("Could not load TLS certificate with BCCSP: %s", err)
 			log.Debugf("Attempting fallback with certfile %s and keyfile %s", certFile, keyFile)
 			fallbackCerts, err := gtls.LoadX509KeyPair(certFile, keyFile)
 			if err != nil {
-				return nil, errors.Wrapf(err, "Could not get the private key %s that matches %s", keyFile, certFile)
+				return nil, nil, errors.Wrapf(err, "Could not get the private key %s that matches %s", keyFile, certFile)
 			}
 			cert = &fallbackCerts
 		} else {
-			return nil, errors.WithMessage(err, "Could not load TLS certificate with BCCSP")
+			return nil, nil, errors.WithMessage(err, "Could not load TLS certificate with BCCSP")
 		}
 
 	}
 
-	return cert, nil
+	return privateKey, cert, nil
 }

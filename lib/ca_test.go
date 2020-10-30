@@ -16,6 +16,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cfssl/csr"
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/mocks"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/sqlite"
@@ -23,7 +24,6 @@ import (
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/metricsfakes"
-	"github.com/stretchr/testify/assert"
 )
 
 const (

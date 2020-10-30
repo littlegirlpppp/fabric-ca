@@ -28,6 +28,7 @@ import (
 
 	"github.com/cloudflare/cfssl/csr"
 	"github.com/cloudflare/cfssl/log"
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/attr"
@@ -38,7 +39,6 @@ import (
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/common/attrmgr"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
-	"github.com/stretchr/testify/assert"
 )
 
 const (

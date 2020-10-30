@@ -10,13 +10,13 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/attr"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/mocks"
 	cadbuser "github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestRegistrarAttribute(t *testing.T) {

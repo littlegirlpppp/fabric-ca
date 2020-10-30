@@ -12,11 +12,11 @@ import (
 	"testing"
 
 	fp256bn "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
+	"github.com/pkg/errors"
+	"github.com/stretchr/testify/assert"
 	. "github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/idemix/mocks"
 	"github.com/tw-bc-group/fabric-gm/idemix"
-	"github.com/pkg/errors"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestCRIInvalidTokenAuth(t *testing.T) {

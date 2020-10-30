@@ -20,8 +20,8 @@ import (
 	"strings"
 	"testing"
 
-	. "github.com/tw-bc-group/fabric-ca-gm/lib/streamer"
 	"github.com/stretchr/testify/assert"
+	. "github.com/tw-bc-group/fabric-ca-gm/lib/streamer"
 )
 
 type element struct {

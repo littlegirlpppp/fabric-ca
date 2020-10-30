@@ -20,6 +20,9 @@ import (
 
 	"github.com/cloudflare/cfssl/certdb"
 	"github.com/cloudflare/cfssl/log"
+	"github.com/jmoiron/sqlx"
+	"github.com/pkg/errors"
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/mocks"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/certificaterequest"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
@@ -27,9 +30,6 @@ import (
 	cadbuser "github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/metricsfakes"
-	"github.com/jmoiron/sqlx"
-	"github.com/pkg/errors"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestGetCertificatesDB(t *testing.T) {

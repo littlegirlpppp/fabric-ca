@@ -12,8 +12,8 @@ import (
 	"strconv"
 	"strings"
 
-	db "github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 	"github.com/pkg/errors"
+	db "github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
 )
 
 // Current levels which are incremented each time there is a change which

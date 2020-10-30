@@ -11,10 +11,10 @@ import (
 	"path/filepath"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/tw-bc-group/fabric-ca-gm/api"
-	"github.com/tw-bc-group/fabric-ca-gm/lib"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
+	"github.com/tw-bc-group/fabric-ca-gm/api"
+	"github.com/tw-bc-group/fabric-ca-gm/lib"
 )
 
 func (c *ClientCmd) newReenrollCommand() *cobra.Command {

@@ -9,9 +9,9 @@ package idemix
 import (
 	"github.com/hyperledger/fabric-amcl/amcl"
 	fp256bn "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
-	"github.com/tw-bc-group/fabric-gm/idemix"
 	"github.com/pkg/errors"
 	"github.com/tjfoc/gmsm/sm2"
+	"github.com/tw-bc-group/fabric-gm/idemix"
 )
 
 // Lib represents idemix library

@@ -19,12 +19,12 @@ import (
 	"time"
 
 	"github.com/cloudflare/cfssl/csr"
+	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	. "github.com/tw-bc-group/fabric-ca-gm/lib"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/tls"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/common/attrmgr"
-	"github.com/stretchr/testify/assert"
 )
 
 var (

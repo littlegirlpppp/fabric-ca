@@ -10,11 +10,11 @@ import (
 	"errors"
 	"fmt"
 
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/mocks"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/util"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("migrator", func() {
