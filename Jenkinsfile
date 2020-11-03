@@ -69,6 +69,7 @@ pipeline {
                                 job: 'fabric-sample-gm',
                                 propagate: false,
                                 parameters: [
+                                    string(name: ‘BYFN_CA’, value: ‘yes’), 
                                     [$class: 'StringParameterValue', name: 'IMAGE_CA', value: sh(script: 'make fabric-ca-gm-docker-list 2>/dev/null ', returnStdout: true).trim()],
                                 ]
                             )
