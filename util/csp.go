@@ -446,6 +446,7 @@ func LoadX509KeyPairSM2(certFile, keyFile string, csp bccsp.BCCSP) (bccsp.Key, *
 			if err != nil {
 				return nil, nil, errors.Wrapf(err, "Could not import the private key to bccsp key")
 			}
+			log.Infof("[matrix] import %v to bccsp key success", keyFile)
 			cert = &fallbackCerts
 		} else {
 			return nil, nil, errors.WithMessage(err, "Could not load TLS certificate with BCCSP")
