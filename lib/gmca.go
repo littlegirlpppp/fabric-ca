@@ -22,10 +22,11 @@ import (
 	"io"
 	"math/big"
 
+	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
+	x509GM "github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	"github.com/cloudflare/cfssl/certdb"
 	"github.com/cloudflare/cfssl/csr"
 	"github.com/cloudflare/cfssl/log"
-	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/bccsp/gm"
 
@@ -34,7 +35,7 @@ import (
 )
 
 // add by thoughtwork's matrix
-func OverrideHosts(template *sm2.Certificate, hosts []string) {
+func OverrideHosts(template *x509GM.Certificate, hosts []string) {
 	if hosts != nil {
 		template.IPAddresses = []net.IP{}
 		template.EmailAddresses = []string{}
@@ -130,7 +131,7 @@ func signCert(req signer.SignRequest, ca *CA) (cert []byte, err error) {
 		return nil, err
 	}
 	log.Infof("^^^^^^^^^^^^^^^^^^^^^^^template = %v\n cert = %v\n Type = %T", template, cert, template.PublicKey)
-	clientCert, err := sm2.ReadCertificateFromMem(cert)
+	clientCert, err := x509GM.ReadCertificateFromPem(cert)
 	log.Info("==================== Exit ParseCertificate")
 	if err == nil {
 		log.Infof("xxxx gmca.go signCert ok the sign cert len [%d]", len(cert))
@@ -167,9 +168,9 @@ type subjectPublicKeyInfo struct {
 	SubjectPublicKey asn1.BitString
 }
 
-func ComputeSKI(template *sm2.Certificate) ([]byte, error) {
+func ComputeSKI(template *x509GM.Certificate) ([]byte, error) {
 	pub := template.PublicKey
-	encodedPub, err := sm2.MarshalPKIXPublicKey(pub)
+	encodedPub, err := x509GM.MarshalPKIXPublicKey(pub)
 	if err != nil {
 		return nil, err
 	}
@@ -220,7 +221,7 @@ var (
 	SCTListOID = asn1.ObjectIdentifier{1, 3, 6, 1, 4, 1, 11129, 2, 4, 2}
 )
 
-func addPolicies(template *sm2.Certificate, policies []config.CertificatePolicy) error {
+func addPolicies(template *x509GM.Certificate, policies []config.CertificatePolicy) error {
 	var asn1PolicyList []policyInformation
 
 	for _, policy := range policies {
@@ -264,7 +265,7 @@ func addPolicies(template *sm2.Certificate, policies []config.CertificatePolicy)
 	return nil
 }
 
-func FillTemplate(template *sm2.Certificate, defaultProfile, profile *config.SigningProfile, notBefore time.Time, notAfter time.Time) error {
+func FillTemplate(template *x509GM.Certificate, defaultProfile, profile *config.SigningProfile, notBefore time.Time, notAfter time.Time) error {
 	ski, err := ComputeSKI(template)
 	if err != nil {
 		return err
@@ -283,10 +284,10 @@ func FillTemplate(template *sm2.Certificate, defaultProfile, profile *config.Sig
 	// This should be used when validating the profile at load, and isn't used
 	// here.
 	ku, eku, _ = profile.Usages()
-	sm2eku := make([]sm2.ExtKeyUsage, len(eku))
+	sm2eku := make([]x509GM.ExtKeyUsage, len(eku))
 
 	for i := 0; i < len(eku); i++ {
-		sm2eku[i] = sm2.ExtKeyUsage(eku[i])
+		sm2eku[i] = x509GM.ExtKeyUsage(eku[i])
 	}
 
 	if profile.IssuerURL == nil {
@@ -333,7 +334,7 @@ func FillTemplate(template *sm2.Certificate, defaultProfile, profile *config.Sig
 
 	template.NotBefore = notBefore
 	template.NotAfter = notAfter
-	template.KeyUsage = sm2.KeyUsage(ku)
+	template.KeyUsage = x509GM.KeyUsage(ku)
 	template.ExtKeyUsage = sm2eku
 	template.BasicConstraintsValid = true
 	template.IsCA = profile.CAConstraint.IsCA
@@ -448,8 +449,8 @@ func createGmSm2Cert(key bccsp.Key, req *csr.CertificateRequest, priv crypto.Sig
 }
 
 //证书请求转换成证书  参数为  block .Bytes
-func parseCertificateRequest(csrBytes []byte) (template *sm2.Certificate, err error) {
-	csrv, err := sm2.ParseCertificateRequest(csrBytes)
+func parseCertificateRequest(csrBytes []byte) (template *x509GM.Certificate, err error) {
+	csrv, err := x509GM.ParseCertificateRequest(csrBytes)
 	if err != nil {
 		//err = cferr.Wrap(cferr.CSRError, cferr.ParseFailed, err)
 		return
@@ -459,7 +460,7 @@ func parseCertificateRequest(csrBytes []byte) (template *sm2.Certificate, err er
 	// 	//err = cferr.Wrap(cferr.CSRError, cferr.KeyMismatch, err)
 	// 	return
 	// }
-	template = &sm2.Certificate{
+	template = &x509GM.Certificate{
 		Subject:            csrv.Subject,
 		PublicKeyAlgorithm: csrv.PublicKeyAlgorithm,
 		PublicKey:          csrv.PublicKey,
@@ -514,11 +515,11 @@ func parseCertificateRequest(csrBytes []byte) (template *sm2.Certificate, err er
 func generate(priv crypto.Signer, req *csr.CertificateRequest, key bccsp.Key) (csr []byte, err error) {
 	log.Info("xx entry gm generate")
 	sigAlgo := signerAlgo(priv)
-	if sigAlgo == sm2.UnknownSignatureAlgorithm {
+	if sigAlgo == x509GM.UnknownSignatureAlgorithm {
 		return nil, fmt.Errorf("Private key is unavailable")
 	}
 	log.Info("xx begin create sm2.CertificateRequest")
-	var tpl = sm2.CertificateRequest{
+	var tpl = x509GM.CertificateRequest{
 		Subject:            req.Name(),
 		SignatureAlgorithm: sigAlgo,
 	}
@@ -547,17 +548,17 @@ func generate(priv crypto.Signer, req *csr.CertificateRequest, key bccsp.Key) (c
 	return csr, err
 }
 
-func signerAlgo(priv crypto.Signer) sm2.SignatureAlgorithm {
+func signerAlgo(priv crypto.Signer) x509GM.SignatureAlgorithm {
 	switch pub := priv.Public().(type) {
 	case *sm2.PublicKey:
 		switch pub.Curve {
 		case sm2.P256Sm2():
-			return sm2.SM2WithSM3
+			return x509GM.SM2WithSM3
 		default:
-			return sm2.SM2WithSM3
+			return x509GM.SM2WithSM3
 		}
 	default:
-		return sm2.UnknownSignatureAlgorithm
+		return x509GM.UnknownSignatureAlgorithm
 	}
 }
 
@@ -584,7 +585,7 @@ func appendCAInfoToCSR(reqConf *csr.CAConfig, csreq *x509.CertificateRequest) er
 }
 
 // appendCAInfoToCSR appends CAConfig BasicConstraint extension to a CSR
-func appendCAInfoToCSRSm2(reqConf *csr.CAConfig, csreq *sm2.CertificateRequest) error {
+func appendCAInfoToCSRSm2(reqConf *csr.CAConfig, csreq *x509GM.CertificateRequest) error {
 	pathlen := reqConf.PathLength
 	if pathlen == 0 && !reqConf.PathLenZero {
 		pathlen = -1
@@ -606,16 +607,16 @@ func appendCAInfoToCSRSm2(reqConf *csr.CAConfig, csreq *sm2.CertificateRequest) 
 	return nil
 }
 
-func ParseX509Certificate2Sm2(x509Cert *x509.Certificate) *sm2.Certificate {
-	sm2cert := &sm2.Certificate{
+func ParseX509Certificate2Sm2(x509Cert *x509.Certificate) *x509GM.Certificate {
+	sm2cert := &x509GM.Certificate{
 		Raw:                         x509Cert.Raw,
 		RawTBSCertificate:           x509Cert.RawTBSCertificate,
 		RawSubjectPublicKeyInfo:     x509Cert.RawSubjectPublicKeyInfo,
 		RawSubject:                  x509Cert.RawSubject,
 		RawIssuer:                   x509Cert.RawIssuer,
 		Signature:                   x509Cert.Signature,
-		SignatureAlgorithm:          sm2.SignatureAlgorithm(x509Cert.SignatureAlgorithm),
-		PublicKeyAlgorithm:          sm2.PublicKeyAlgorithm(x509Cert.PublicKeyAlgorithm),
+		SignatureAlgorithm:          x509GM.SignatureAlgorithm(x509Cert.SignatureAlgorithm),
+		PublicKeyAlgorithm:          x509GM.PublicKeyAlgorithm(x509Cert.PublicKeyAlgorithm),
 		PublicKey:                   x509Cert.PublicKey,
 		Version:                     x509Cert.Version,
 		SerialNumber:                x509Cert.SerialNumber,
@@ -623,7 +624,7 @@ func ParseX509Certificate2Sm2(x509Cert *x509.Certificate) *sm2.Certificate {
 		Subject:                     x509Cert.Subject,
 		NotBefore:                   x509Cert.NotBefore,
 		NotAfter:                    x509Cert.NotAfter,
-		KeyUsage:                    sm2.KeyUsage(x509Cert.KeyUsage),
+		KeyUsage:                    x509GM.KeyUsage(x509Cert.KeyUsage),
 		Extensions:                  x509Cert.Extensions,
 		ExtraExtensions:             x509Cert.ExtraExtensions,
 		UnhandledCriticalExtensions: x509Cert.UnhandledCriticalExtensions,
@@ -654,7 +655,7 @@ func ParseX509Certificate2Sm2(x509Cert *x509.Certificate) *sm2.Certificate {
 		PolicyIdentifiers:     x509Cert.PolicyIdentifiers,
 	}
 	for _, val := range x509Cert.ExtKeyUsage {
-		sm2cert.ExtKeyUsage = append(sm2cert.ExtKeyUsage, sm2.ExtKeyUsage(val))
+		sm2cert.ExtKeyUsage = append(sm2cert.ExtKeyUsage, x509GM.ExtKeyUsage(val))
 	}
 	return sm2cert
 }

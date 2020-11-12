@@ -9,12 +9,12 @@ package idemix
 import (
 	"bytes"
 	"fmt"
+	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
 
 	"github.com/cloudflare/cfssl/log"
 	fp256bn "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
-	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/idemix"

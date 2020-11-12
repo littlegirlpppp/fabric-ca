@@ -18,6 +18,7 @@ package command
 
 import (
 	"bytes"
+
 	//"crypto/x509"
 	"encoding/pem"
 	"fmt"
@@ -27,10 +28,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	x509GM "github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	"github.com/cloudflare/cfssl/log"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
-	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
@@ -139,7 +140,7 @@ func storeCAChain(config *lib.ClientConfig, si *lib.GetCAInfoResponse) error {
 			break
 		}
 
-		cert, err := sm2.ParseCertificate(block.Bytes)
+		cert, err := x509GM.ParseCertificate(block.Bytes)
 		if err != nil {
 			return errors.Wrap(err, "Failed to parse certificate in the CA chain")
 		}

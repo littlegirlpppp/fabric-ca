@@ -7,8 +7,10 @@ SPDX-License-Identifier: Apache-2.0
 
 package mocks
 
-import FP256BN "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
-import sm2 "github.com/tjfoc/gmsm/sm2"
+import (
+	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
+	FP256BN "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
+)
 import idemix "github.com/tw-bc-group/fabric-gm/idemix"
 import mock "github.com/stretchr/testify/mock"
 

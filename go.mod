@@ -16,7 +16,6 @@ require (
 	github.com/gorilla/mux v1.6.3-0.20181228004216-ef912dd76ebe
 	github.com/grantae/certinfo v0.0.0-20170412194111-59d56a35515b
 	github.com/hashicorp/hcl v0.0.0-20171017181929-23c074d0eceb // indirect
-	github.com/hpcloud/tail v1.0.1-0.20180514194441-a1dbeea552b7 // indirect
 	github.com/hyperledger/fabric-amcl v0.0.0-20180903120555-6b78f7a22d95
 	github.com/hyperledger/fabric-lib-go v1.0.1-0.20181230093725-20a0acfb37ba
 	github.com/jmhodges/clock v0.0.0-20160418191101-880ee4c33548 // indirect
@@ -28,8 +27,8 @@ require (
 	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/miekg/pkcs11 v1.0.2 // indirect
 	github.com/mitchellh/mapstructure v1.1.1
-	github.com/onsi/ginkgo v1.8.0
-	github.com/onsi/gomega v1.9.0
+	github.com/onsi/ginkgo v1.12.1
+	github.com/onsi/gomega v1.10.3
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
 	github.com/pelletier/go-toml v1.0.2-0.20171024211038-4e9e0ee19b60 // indirect
 	github.com/pkg/errors v0.8.1
@@ -43,12 +42,12 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.0.1-0.20171207042631-1a0c4a370c3e
 	github.com/stretchr/testify v1.5.1
-	github.com/tjfoc/gmsm v1.3.2
-	github.com/tw-bc-group/fabric-gm v0.0.0-20201030081954-2a38b1eb3e87
+	github.com/tw-bc-group/fabric-gm v0.0.0-20201112022540-d3810d6681a7
 	github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa
-	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de
+	golang.org/x/crypto v0.0.0-20201012173705-84dcc777aaee
 	gopkg.in/asn1-ber.v1 v1.0.0-20150924051756-4e86f4367175 // indirect
-	gopkg.in/fsnotify/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/ldap.v2 v2.5.0
-	gopkg.in/yaml.v2 v2.2.8
+	gopkg.in/yaml.v2 v2.3.0
 )
+
+replace github.com/Hyperledger-TWGC/tjfoc-gm v0.0.0-20201027032413-de75d571dd85 => github.com/tw-bc-group/tjfoc-gm v0.0.0-20201111115702-d6eb42f3ea58
