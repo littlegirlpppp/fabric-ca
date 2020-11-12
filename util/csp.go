@@ -25,12 +25,12 @@ import (
 	"encoding/hex"
 	"encoding/pem"
 	"fmt"
+	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
 	"io/ioutil"
 	"strings"
 	_ "time" // for ocspSignerFromConfig
 
 	gtls "github.com/Hyperledger-TWGC/tjfoc-gm/gmtls"
-	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
 	x509GM "github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	_ "github.com/cloudflare/cfssl/cli" // for ocspSignerFromConfig
 	"github.com/cloudflare/cfssl/config"
@@ -196,7 +196,7 @@ func GetSignerFromCert(cert *x509.Certificate, csp bccsp.BCCSP) (bccsp.Key, cryp
 }
 
 // GetSignerFromSM2Cert load private key represented by ski and return bccsp signer that conforms to crypto.Signer
-func GetSignerFromSM2Cert(cert *x509.Certificate, csp bccsp.BCCSP) (bccsp.Key, crypto.Signer, error) {
+func GetSignerFromSM2Cert(cert *x509GM.Certificate, csp bccsp.BCCSP) (bccsp.Key, crypto.Signer, error) {
 	if csp == nil {
 		return nil, nil, fmt.Errorf("CSP was not initialized")
 	}
@@ -437,6 +437,16 @@ func LoadX509KeyPairSM2(certFile, keyFile string, csp bccsp.BCCSP) (bccsp.Key, *
 			if err != nil {
 				return nil, nil, errors.Wrapf(err, "Could not get the private key %s that matches %s", keyFile, certFile)
 			}
+			keyPEMBLock, err:= ioutil.ReadFile(keyFile)
+			if err != nil {
+				return nil, nil, err
+			}
+			keyDERBlock, _ := pem.Decode(keyPEMBLock)
+			privateKey, err = csp.KeyImport(keyDERBlock.Bytes, &bccsp.GMSM2PrivateKeyImportOpts{Temporary: true})
+			if err != nil {
+				return nil, nil, errors.Wrapf(err, "Could not import the private key to bccsp key")
+			}
+			log.Infof("[matrix] import %v to bccsp key success", keyFile)
 			cert = &fallbackCerts
 		} else {
 			return nil, nil, errors.WithMessage(err, "Could not load TLS certificate with BCCSP")

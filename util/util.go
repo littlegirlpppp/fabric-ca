@@ -25,6 +25,8 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
+	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
+	x509GM "github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	"io"
 	"io/ioutil"
 	"math/big"
@@ -39,8 +41,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
-	x509GM "github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	"github.com/cloudflare/cfssl/log"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
@@ -912,7 +912,7 @@ func ErrorContains(t *testing.T, err error, contains, msg string, args ...interf
 	}
 }
 
-//x509GM 证书转换 x509 证书
+//sm2 证书转换 x509 证书
 func ParseSm2Certificate2X509(sm2Cert *x509GM.Certificate) *x509.Certificate {
 	x509cert := &x509.Certificate{
 		Raw:                     sm2Cert.Raw,
@@ -981,7 +981,7 @@ func ParseSm2Certificate2X509(sm2Cert *x509GM.Certificate) *x509.Certificate {
 	return x509cert
 }
 
-// X509证书格式转换为 X509GM证书格式
+// X509证书格式转换为 SM2证书格式
 func ParseX509Certificate2Sm2(x509Cert *x509.Certificate) *x509GM.Certificate {
 	sm2cert := &x509GM.Certificate{
 		Raw:                     x509Cert.Raw,
