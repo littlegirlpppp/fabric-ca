@@ -437,6 +437,15 @@ func LoadX509KeyPairSM2(certFile, keyFile string, csp bccsp.BCCSP) (bccsp.Key, *
 			if err != nil {
 				return nil, nil, errors.Wrapf(err, "Could not get the private key %s that matches %s", keyFile, certFile)
 			}
+			keyPEMBLock, err:= ioutil.ReadFile(keyFile)
+			if err != nil {
+				return nil, nil, err
+			}
+			keyDERBlock, _ := pem.Decode(keyPEMBLock)
+			privateKey, err = csp.KeyImport(keyDERBlock.Bytes, &bccsp.GMSM2PrivateKeyImportOpts{Temporary: true})
+			if err != nil {
+				return nil, nil, errors.Wrapf(err, "Could not import the private key to bccsp key")
+			}
 			cert = &fallbackCerts
 		} else {
 			return nil, nil, errors.WithMessage(err, "Could not load TLS certificate with BCCSP")
