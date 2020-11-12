@@ -22,6 +22,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
+	x509GM "github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	"github.com/cloudflare/cfssl/certdb"
 	"github.com/cloudflare/cfssl/config"
 	cfcsr "github.com/cloudflare/cfssl/csr"
@@ -30,7 +32,6 @@ import (
 	"github.com/cloudflare/cfssl/signer"
 	cflocalsigner "github.com/cloudflare/cfssl/signer/local"
 	"github.com/pkg/errors"
-	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/attr"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
@@ -496,7 +497,7 @@ func (ca *CA) initConfig() (err error) {
 	return nil
 }
 
-func getVerifyOptions(ca *CA) (*sm2.VerifyOptions, error) {
+func getVerifyOptions(ca *CA) (*x509GM.VerifyOptions, error) {
 	chain, err := ca.getCAChain()
 	if err != nil {
 		return nil, err
@@ -505,23 +506,23 @@ func getVerifyOptions(ca *CA) (*sm2.VerifyOptions, error) {
 	if block == nil {
 		return nil, errors.New("No root certificate was found")
 	}
-	rootCert, err := sm2.ParseCertificate(block.Bytes)
+	rootCert, err := x509GM.ParseCertificate(block.Bytes)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to parse root certificate: %s", err)
 	}
-	rootPool := sm2.NewCertPool()
+	rootPool := x509GM.NewCertPool()
 	rootPool.AddCert(rootCert)
-	var intPool *sm2.CertPool
+	var intPool *x509GM.CertPool
 	if len(rest) > 0 {
-		intPool = sm2.NewCertPool()
+		intPool = x509GM.NewCertPool()
 		if !intPool.AppendCertsFromPEM(rest) {
 			return nil, errors.New("Failed to add intermediate PEM certificates")
 		}
 	}
-	return &sm2.VerifyOptions{
+	return &x509GM.VerifyOptions{
 		Roots:         rootPool,
 		Intermediates: intPool,
-		KeyUsages:     []sm2.ExtKeyUsage{sm2.ExtKeyUsageAny},
+		KeyUsages:     []x509GM.ExtKeyUsage{x509GM.ExtKeyUsageAny},
 	}, nil
 }
 

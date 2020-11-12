@@ -20,16 +20,16 @@ require (
 	github.com/hyperledger/fabric-amcl v0.0.0-20180903120555-6b78f7a22d95
 	github.com/hyperledger/fabric-lib-go v1.0.1-0.20181230093725-20a0acfb37ba
 	github.com/jmhodges/clock v0.0.0-20160418191101-880ee4c33548 // indirect
-	github.com/jmoiron/sqlx v0.0.0-20160914234533-05b81a7d5d38
+	github.com/jmoiron/sqlx v1.2.0
 	github.com/kisielk/sqlstruct v0.0.0-20150923205031-648daed35d49
 	github.com/kr/fs v0.0.0-20131111012553-2788f0dbd169 // indirect
-	github.com/lib/pq v0.0.0-20161014011634-ae8357db35d7
+	github.com/lib/pq v1.3.0
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/miekg/pkcs11 v1.0.2 // indirect
 	github.com/mitchellh/mapstructure v1.1.1
-	github.com/onsi/ginkgo v1.8.0
-	github.com/onsi/gomega v1.9.0
+	github.com/onsi/ginkgo v1.12.1
+	github.com/onsi/gomega v1.10.3
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
 	github.com/pelletier/go-toml v1.0.2-0.20171024211038-4e9e0ee19b60 // indirect
 	github.com/pkg/errors v0.8.1
@@ -43,12 +43,29 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.0.1-0.20171207042631-1a0c4a370c3e
 	github.com/stretchr/testify v1.5.1
-	github.com/tjfoc/gmsm v1.3.2
-	github.com/tw-bc-group/fabric-gm v0.0.0-20201030081954-2a38b1eb3e87
-	github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa
-	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de
+	github.com/sykesm/zap-logfmt v0.0.3 // indirect
+	github.com/syndtr/goleveldb v0.0.0-20180815032940-ae2bd5eed72d // indirect
+	github.com/tedsuo/ifrit v0.0.0-20180802180643-bea94bb476cc // indirect
+	github.com/tw-bc-group/fabric-gm v0.0.0-20201111064934-206130ce9c1f
+	github.com/tw-bc-group/net-go-gm v0.0.0-20201030055721-5906b2d70408
+	github.com/vektra/mockery v1.1.2 // indirect
+	github.com/weppos/publicsuffix-go v0.13.0 // indirect
+	github.com/willf/bitset v1.1.9 // indirect
+	github.com/zcqzcg/sarama v1.0.1 // indirect
+	github.com/ziutek/mymysql v1.5.4 // indirect
+	github.com/zmap/zcrypto v0.0.0-20200911161511-43ff0ea04f21 // indirect
+	github.com/zmap/zlint/v2 v2.2.1 // indirect
+	go.etcd.io/etcd v0.5.0-alpha.5.0.20181228115726-23731bf9ba55 // indirect
+	golang.org/x/crypto v0.0.0-20201012173705-84dcc777aaee
+	golang.org/x/net v0.0.0-20201026091529-146b70c837a4 // indirect
+	golang.org/x/tools v0.0.0-20201023174141-c8cfbd0f21e6 // indirect
+	google.golang.org/appengine v1.6.6 // indirect
+	google.golang.org/grpc v1.31.0 // indirect
+	gopkg.in/alecthomas/kingpin.v2 v2.2.6 // indirect
 	gopkg.in/asn1-ber.v1 v1.0.0-20150924051756-4e86f4367175 // indirect
 	gopkg.in/fsnotify/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/ldap.v2 v2.5.0
-	gopkg.in/yaml.v2 v2.2.8
+	gopkg.in/yaml.v2 v2.3.0
 )
+
+replace github.com/Hyperledger-TWGC/tjfoc-gm => github.com/tw-bc-group/tjfoc-gm v1.3.4-0.20201111115702-d6eb42f3ea58

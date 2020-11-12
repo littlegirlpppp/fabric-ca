@@ -14,12 +14,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	"github.com/cloudflare/cfssl/log"
 	proto "github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-amcl/amcl"
 	fp256bn "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
 	"github.com/pkg/errors"
-	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/common"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
@@ -154,7 +154,7 @@ func (i *issuer) RevocationPublicKey() ([]byte, error) {
 		return nil, errors.New("Issuer is not initialized")
 	}
 	rpk := i.RevocationAuthority().PublicKey()
-	encodedPubKey, err := sm2.MarshalPKIXPublicKey(rpk)
+	encodedPubKey, err := x509.MarshalPKIXPublicKey(rpk)
 	if err != nil {
 		return nil, errors.Wrapf(err, "Failed to encode revocation authority public key of the issuer %s", i.Name())
 	}

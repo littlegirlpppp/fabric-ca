@@ -7,10 +7,10 @@ SPDX-License-Identifier: Apache-2.0
 package idemix
 
 import (
+	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
 	"github.com/hyperledger/fabric-amcl/amcl"
 	fp256bn "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
 	"github.com/pkg/errors"
-	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tw-bc-group/fabric-gm/idemix"
 )
 

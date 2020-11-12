@@ -3,7 +3,7 @@ package mocks
 
 import FP256BN "github.com/hyperledger/fabric-amcl/amcl/FP256BN"
 import amcl "github.com/hyperledger/fabric-amcl/amcl"
-import sm2 "github.com/tjfoc/gmsm/sm2"
+import sm2 "github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
 import idemix "github.com/tw-bc-group/fabric-gm/idemix"
 import mock "github.com/stretchr/testify/mock"
 

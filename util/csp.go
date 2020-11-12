@@ -30,6 +30,8 @@ import (
 	_ "time" // for ocspSignerFromConfig
 
 	gtls "github.com/Hyperledger-TWGC/tjfoc-gm/gmtls"
+	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
+	x509GM "github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	_ "github.com/cloudflare/cfssl/cli" // for ocspSignerFromConfig
 	"github.com/cloudflare/cfssl/config"
 	"github.com/cloudflare/cfssl/csr"
@@ -39,7 +41,6 @@ import (
 	"github.com/cloudflare/cfssl/signer"
 	"github.com/cloudflare/cfssl/signer/local"
 	"github.com/pkg/errors"
-	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 	"github.com/tw-bc-group/fabric-gm/bccsp/gm"
@@ -195,7 +196,7 @@ func GetSignerFromCert(cert *x509.Certificate, csp bccsp.BCCSP) (bccsp.Key, cryp
 }
 
 // GetSignerFromSM2Cert load private key represented by ski and return bccsp signer that conforms to crypto.Signer
-func GetSignerFromSM2Cert(cert *sm2.Certificate, csp bccsp.BCCSP) (bccsp.Key, crypto.Signer, error) {
+func GetSignerFromSM2Cert(cert *x509.Certificate, csp bccsp.BCCSP) (bccsp.Key, crypto.Signer, error) {
 	if csp == nil {
 		return nil, nil, fmt.Errorf("CSP was not initialized")
 	}
@@ -254,7 +255,7 @@ func GetSignerFromCertFile(certFile string, csp bccsp.BCCSP) (bccsp.Key, crypto.
 		return nil, nil, nil, errors.Wrapf(err, "Could not read certFile '%s'", certFile)
 	}
 	if IsGMConfig() {
-		sm2Cert, err := sm2.ReadCertificateFromPem(certFile)
+		sm2Cert, err := x509GM.ReadCertificateFromPem(certBytes)
 		if err != nil {
 			return nil, nil, nil, err
 		}
@@ -362,7 +363,7 @@ func LoadX509KeyPair(certFile, keyFile string, csp bccsp.BCCSP) (*tls.Certificat
 		return nil, errors.Errorf("Failed to find \"CERTIFICATE\" PEM block in file %s after skipping PEM blocks of the following types: %v", certFile, skippedBlockTypes)
 	}
 
-	sm2Cert, err := sm2.ParseCertificate(cert.Certificate[0])
+	sm2Cert, err := x509GM.ParseCertificate(cert.Certificate[0])
 	if err != nil {
 		return nil, err
 	}
@@ -420,7 +421,7 @@ func LoadX509KeyPairSM2(certFile, keyFile string, csp bccsp.BCCSP) (bccsp.Key, *
 		return nil, nil, errors.Errorf("Failed to find \"CERTIFICATE\" PEM block in file %s after skipping PEM blocks of the following types: %v", certFile, skippedBlockTypes)
 	}
 
-	sm2Cert, err := sm2.ParseCertificate(cert.Certificate[0])
+	sm2Cert, err := x509GM.ParseCertificate(cert.Certificate[0])
 	if err != nil {
 		return nil, nil, err
 	}
