@@ -117,7 +117,7 @@ bin/%: $(GO_SOURCE)
 	@mkdir -p bin && go build -o bin/${@F} -tags "pkcs11" -ldflags "$(GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
 	@echo "Built bin/${@F}"
 
-vendor:
+vendor: clean-vendor
 	go mod vendor
 
 # We (re)build a package within a docker context but persist the $GOPATH/pkg
@@ -242,7 +242,7 @@ docker-list: $(patsubst %,%-docker-list, $(IMAGES))
 docker-clean: $(patsubst %,%-docker-clean, $(IMAGES) $(PROJECT_NAME)-fvt)
 	@rm -rf build/docker/bin/* vendor ||:
 
-native: fabric-ca-client fabric-ca-server
+native: fabric-ca-client fabric-ca-server clean-vendor
 
 release: $(patsubst %,release/%, $(MARCH))
 release-all: $(patsubst %,release/%, $(RELEASE_PLATFORMS))
@@ -293,6 +293,10 @@ dist/linux-ppc64le:
 	cd release/linux-ppc64le && tar -czvf hyperledger-fabric-ca-linux-ppc64le.$(PROJECT_VERSION).tar.gz *
 dist/linux-s390x:
 	cd release/linux-s390x && tar -czvf hyperledger-fabric-ca-linux-s390x.$(PROJECT_VERSION).tar.gz *
+
+.PHONY: clean-vendor
+clean-vendor:
+	-@rm -rf vendor
 
 .PHONY: clean
 clean: docker-clean release-clean

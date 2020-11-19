@@ -418,7 +418,7 @@ func createGmSm2Cert(key bccsp.Key, req *csr.CertificateRequest, priv crypto.Sig
 		return nil, cferr.New(cferr.PolicyError, cferr.InvalidPolicy)
 	}
 
-	csrPEM, err := generate(priv, req, key)
+	csrPEM, err := generate(priv, req)
 	if err != nil {
 		log.Infof("xxxxxxxxxxxxx create csr error:%s", err)
 	}
@@ -512,7 +512,7 @@ func parseCertificateRequest(csrBytes []byte) (template *x509GM.Certificate, err
 }
 
 //cloudflare 证书请求 转成 国密证书请求
-func generate(priv crypto.Signer, req *csr.CertificateRequest, key bccsp.Key) (csr []byte, err error) {
+func generate(priv crypto.Signer, req *csr.CertificateRequest) (csr []byte, err error) {
 	log.Info("xx entry gm generate")
 	sigAlgo := signerAlgo(priv)
 	if sigAlgo == x509GM.UnknownSignatureAlgorithm {
@@ -543,7 +543,7 @@ func generate(priv crypto.Signer, req *csr.CertificateRequest, key bccsp.Key) (c
 	if req.SerialNumber != "" {
 
 	}
-	csr, err = gm.CreateSm2CertificateRequestToMem(&tpl, key)
+	csr, err = gm.CreateSm2CertificateRequestToMem(&tpl, priv)
 	log.Info("xx exit generate")
 	return csr, err
 }

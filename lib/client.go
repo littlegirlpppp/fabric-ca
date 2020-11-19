@@ -216,7 +216,7 @@ func (c *Client) GenCSR(req *api.CSRInfo, id string) ([]byte, bccsp.Key, error) 
 
 	var csrPEM []byte
 	if IsGMConfig() {
-		csrPEM, err = generate(cspSigner, cr, key)
+		csrPEM, err = generate(cspSigner, cr)
 
 	} else {
 		csrPEM, err = csr.Generate(cspSigner, cr)
