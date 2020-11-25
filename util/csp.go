@@ -27,6 +27,7 @@ import (
 	"fmt"
 	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
 	"io/ioutil"
+	"os"
 	"strings"
 	_ "time" // for ocspSignerFromConfig
 
@@ -151,7 +152,12 @@ func getBCCSPKeyOpts(kr csr.KeyRequest, ephemeral bool) (opts bccsp.KeyGenOpts, 
 			return nil, errors.Errorf("Invalid ECDSA key size: %d", kr.Size())
 		}
 	case "gmsm2":
-		return &bccsp.GMSM2KeyGenOpts{Temporary: ephemeral}, nil
+		if os.Getenv("CA_GM_PROVIDER") == "ALIYUN_KMS" {
+			return &bccsp.KMSGMSM2KeyGenOpts{Temporary: ephemeral}, nil
+		} else {
+
+			return &bccsp.GMSM2KeyGenOpts{Temporary: ephemeral}, nil
+		}
 	default:
 		return nil, errors.Errorf("Invalid algorithm: %s", kr.Algo())
 	}
@@ -268,6 +274,7 @@ func GetSignerFromCertFile(certFile string, csp bccsp.BCCSP) (bccsp.Key, crypto.
 	return key, cspSigner, cert, err
 }
 
+//TODO: remove first param
 // BCCSPKeyRequestGenerate generates keys through BCCSP
 // somewhat mirroring to cfssl/req.KeyRequest.Generate()
 func BCCSPKeyRequestGenerate(req *csr.CertificateRequest, myCSP bccsp.BCCSP) (bccsp.Key, crypto.Signer, error) {
@@ -293,33 +300,43 @@ func ImportBCCSPKeyFromPEM(keyFile string, myCSP bccsp.BCCSP, temporary bool) (b
 	if err != nil {
 		return nil, err
 	}
-	key, err := utils.PEMtoPrivateKey(keyBuff, nil)
-	if err != nil {
-		return nil, errors.WithMessage(err, fmt.Sprintf("Failed parsing private key from %s", keyFile))
-	}
-	switch key.(type) {
-	case *sm2.PrivateKey:
-		log.Info("xxxx sm2.PrivateKey!!!!!!!!!!!")
-		block, _ := pem.Decode(keyBuff)
-		priv, err := myCSP.KeyImport(block.Bytes, &bccsp.GMSM2PrivateKeyImportOpts{Temporary: temporary})
+	var key interface{}
+	if os.Getenv("CA_GM_PROVIDER") == "ALIYUN_KMS" {
+		priv, err := myCSP.KeyImport(strings.Trim(string(keyBuff), "\n"), &bccsp.KMSGMSM2KeyImportOpts{Temporary: temporary})
 		if err != nil {
-			return nil, fmt.Errorf("Failed to convert SM2 private key from %s: %s", keyFile, err.Error())
+			return nil, fmt.Errorf("failed to convert kms SM2 private key from %s: %s", keyFile, err.Error())
 		}
 		return priv, nil
-	case *ecdsa.PrivateKey:
-		priv, err := utils.PrivateKeyToDER(key.(*ecdsa.PrivateKey))
+	} else {
+		key, err = utils.PEMtoPrivateKey(keyBuff, nil)
 		if err != nil {
-			return nil, errors.WithMessage(err, fmt.Sprintf("Failed to convert ECDSA private key for '%s'", keyFile))
+			return nil, errors.WithMessage(err, fmt.Sprintf("Failed parsing private key from %s", keyFile))
 		}
-		sk, err := myCSP.KeyImport(priv, &bccsp.ECDSAPrivateKeyImportOpts{Temporary: temporary})
-		if err != nil {
-			return nil, errors.WithMessage(err, fmt.Sprintf("Failed to import ECDSA private key for '%s'", keyFile))
+
+		switch key.(type) {
+		case *sm2.PrivateKey:
+			log.Info("xxxx sm2.PrivateKey!!!!!!!!!!!")
+			block, _ := pem.Decode(keyBuff)
+			priv, err := myCSP.KeyImport(block.Bytes, &bccsp.GMSM2PrivateKeyImportOpts{Temporary: temporary})
+			if err != nil {
+				return nil, fmt.Errorf("failed to convert SM2 private key from %s: %s", keyFile, err.Error())
+			}
+			return priv, nil
+		case *ecdsa.PrivateKey:
+			priv, err := utils.PrivateKeyToDER(key.(*ecdsa.PrivateKey))
+			if err != nil {
+				return nil, errors.WithMessage(err, fmt.Sprintf("Failed to convert ECDSA private key for '%s'", keyFile))
+			}
+			sk, err := myCSP.KeyImport(priv, &bccsp.ECDSAPrivateKeyImportOpts{Temporary: temporary})
+			if err != nil {
+				return nil, errors.WithMessage(err, fmt.Sprintf("Failed to import ECDSA private key for '%s'", keyFile))
+			}
+			return sk, nil
+		case *rsa.PrivateKey:
+			return nil, errors.Errorf("Failed to import RSA key from %s; RSA private key import is not supported", keyFile)
+		default:
+			return nil, errors.Errorf("Failed to import key from %s: invalid secret key type", keyFile)
 		}
-		return sk, nil
-	case *rsa.PrivateKey:
-		return nil, errors.Errorf("Failed to import RSA key from %s; RSA private key import is not supported", keyFile)
-	default:
-		return nil, errors.Errorf("Failed to import key from %s: invalid secret key type", keyFile)
 	}
 }
 
@@ -437,7 +454,7 @@ func LoadX509KeyPairSM2(certFile, keyFile string, csp bccsp.BCCSP) (bccsp.Key, *
 			if err != nil {
 				return nil, nil, errors.Wrapf(err, "Could not get the private key %s that matches %s", keyFile, certFile)
 			}
-			keyPEMBLock, err:= ioutil.ReadFile(keyFile)
+			keyPEMBLock, err := ioutil.ReadFile(keyFile)
 			if err != nil {
 				return nil, nil, err
 			}

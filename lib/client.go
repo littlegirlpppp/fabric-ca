@@ -8,6 +8,7 @@ package lib
 
 import (
 	"bytes"
+	"crypto"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -193,12 +194,12 @@ func (c *Client) GetCAInfo(req *api.GetCAInfoRequest) (*GetCAInfoResponse, error
 }
 
 // GenCSR generates a CSR (Certificate Signing Request)
-func (c *Client) GenCSR(req *api.CSRInfo, id string) ([]byte, bccsp.Key, error) {
+func (c *Client) GenCSR(req *api.CSRInfo, id string) ([]byte, bccsp.Key, crypto.Signer, error) {
 	log.Debugf("GenCSR %+v", req)
 
 	err := c.Init()
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
 	cr := c.newCertificateRequest(req)
@@ -211,7 +212,7 @@ func (c *Client) GenCSR(req *api.CSRInfo, id string) ([]byte, bccsp.Key, error) 
 	key, cspSigner, err := util.BCCSPKeyRequestGenerate(cr, c.csp)
 	if err != nil {
 		log.Debugf("failed generating BCCSP key: %s", err)
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
 	var csrPEM []byte
@@ -224,10 +225,10 @@ func (c *Client) GenCSR(req *api.CSRInfo, id string) ([]byte, bccsp.Key, error) 
 
 	if err != nil {
 		log.Debugf("failed generating CSR: %s", err)
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
-	return csrPEM, key, nil
+	return csrPEM, key, cspSigner, nil
 }
 
 // Enroll enrolls a new identity
@@ -274,7 +275,7 @@ func (c *Client) net2LocalCAInfo(net *common.CAInfoResponseNet, local *GetCAInfo
 
 func (c *Client) handleX509Enroll(req *api.EnrollmentRequest) (*EnrollmentResponse, error) {
 	// Generate the CSR
-	csrPEM, key, err := c.GenCSR(req.CSR, req.Name)
+	csrPEM, key, _, err := c.GenCSR(req.CSR, req.Name)
 	if err != nil {
 		return nil, errors.WithMessage(err, "Failure generating CSR")
 	}

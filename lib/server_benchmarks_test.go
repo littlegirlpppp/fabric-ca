@@ -408,7 +408,7 @@ func createRevokeRequest(admin *Identity, user *Identity) (*http.Request, error)
 
 func createReenrollRequest(user *Identity) (*http.Request, error) {
 	csr := &user.client.Config.CSR
-	csrPEM, _, err := user.client.GenCSR(csr, user.GetName())
+	csrPEM, _, _, err := user.client.GenCSR(csr, user.GetName())
 	if err != nil {
 		return nil, err
 	}
@@ -443,7 +443,7 @@ func createEnrollRequest(admin *Identity, userName string, regRes *api.Registrat
 	// Generate the CSR
 	csr := &admin.client.Config.CSR
 	csr.CN = userName
-	csrPEM, _, err := admin.client.GenCSR(csr, userName)
+	csrPEM, _, _, err := admin.client.GenCSR(csr, userName)
 	if err != nil {
 		return nil, err
 	}

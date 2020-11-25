@@ -19,6 +19,7 @@ import (
 	"path"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -32,6 +33,7 @@ import (
 	"github.com/cloudflare/cfssl/signer"
 	cflocalsigner "github.com/cloudflare/cfssl/signer/local"
 	"github.com/pkg/errors"
+	kmssm2 "github.com/tw-bc-group/aliyun-kms/sm2"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/attr"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/caerrors"
@@ -1201,12 +1203,27 @@ func validateMatchingKeys(cert *x509.Certificate, keyFile string) error {
 		log.Debug("check public key")
 		switch pub.Curve {
 		case sm2.P256Sm2():
-			privKey, err := util.GetSM2PrivateKey(keyPEM)
-			if err != nil {
-				return err
-			}
-			if pub.X.Cmp(privKey.X) != 0 || pub.Y.Cmp(privKey.Y) != 0 {
-				return errors.New("sm2 private key does not match public key")
+			if os.Getenv("CA_GM_PROVIDER") == "ALIYUN_KMS" {
+				keyAdapter, err := kmssm2.CreateSm2KeyAdapter(strings.TrimRight(string(keyPEM), "\n"), kmssm2.SignAndVerify)
+				if err != nil {
+					return err
+				}
+
+				sm2PubKey, err := keyAdapter.GetPublicKey()
+				if err != nil {
+					return err
+				}
+				if pub.X.Cmp(sm2PubKey.X) != 0 || pub.Y.Cmp(sm2PubKey.Y) != 0 {
+					return errors.New("kms sm2 private key does not match public key")
+				}
+			} else {
+				privKey, err := util.GetSM2PrivateKey(keyPEM)
+				if err != nil {
+					return err
+				}
+				if pub.X.Cmp(privKey.X) != 0 || pub.Y.Cmp(privKey.Y) != 0 {
+					return errors.New("sm2 private key does not match public key")
+				}
 			}
 		default:
 			privKey, err := util.GetECPrivateKey(keyPEM)

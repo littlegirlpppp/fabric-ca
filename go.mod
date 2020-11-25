@@ -11,7 +11,7 @@ require (
 	github.com/go-logfmt/logfmt v0.4.0 // indirect
 	github.com/go-sql-driver/mysql v1.4.1-0.20190510102335-877a9775f068
 	github.com/golang/protobuf v1.4.2
-	github.com/google/certificate-transparency-go v1.0.21 // indirect
+	github.com/google/certificate-transparency-go v1.0.21
 	github.com/gorilla/handlers v1.4.0
 	github.com/gorilla/mux v1.6.3-0.20181228004216-ef912dd76ebe
 	github.com/grantae/certinfo v0.0.0-20170412194111-59d56a35515b
@@ -42,7 +42,8 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.0.1-0.20171207042631-1a0c4a370c3e
 	github.com/stretchr/testify v1.6.1
-	github.com/tw-bc-group/fabric-gm v0.0.0-20201119033441-530ebe94ca1e
+	github.com/tw-bc-group/aliyun-kms v0.0.0-20201120104640-a264dd746212
+	github.com/tw-bc-group/fabric-gm v0.0.0-20201120080309-eb546e19c6ca
 	github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa
 	golang.org/x/crypto v0.0.0-20201012173705-84dcc777aaee
 	gopkg.in/asn1-ber.v1 v1.0.0-20150924051756-4e86f4367175 // indirect
@@ -50,4 +51,8 @@ require (
 	gopkg.in/yaml.v2 v2.3.0
 )
 
-replace github.com/Hyperledger-TWGC/tjfoc-gm v0.0.0-20201117155542-9542a21fafd1 => github.com/tw-bc-group/tjfoc-gm v0.0.0-20201119020514-29c15c7223f6
+replace github.com/Hyperledger-TWGC/tjfoc-gm v0.0.0-20201117155542-9542a21fafd1 => github.com/tw-bc-group/tjfoc-gm v0.0.0-20201124022249-edd640b7bf9f
+
+replace github.com/tw-bc-group/fabric-gm v0.0.0-20201120080309-eb546e19c6ca => ../fabric-gm
+
+replace github.com/tw-bc-group/aliyun-kms v0.0.0-20201120104640-a264dd746212 => ../aliyun-kms

@@ -868,7 +868,7 @@ func (s *Server) autoGenerateTLSCertificateKey() error {
 	log.Debugf("TLS CSR: %+v\n", csrReq)
 
 	// Can't use the same CN as the signing certificate CN (default: fabric-ca-server) otherwise no AKI is generated
-	csr, key, err := client.GenCSR(&csrReq, hostname)
+	csr, _, cryptoSigner, err := client.GenCSR(&csrReq, hostname)
 	if err != nil {
 		return fmt.Errorf("failed to generate CSR: %s", err)
 	}
@@ -896,7 +896,7 @@ func (s *Server) autoGenerateTLSCertificateKey() error {
 			return err
 		}
 
-		cert, err = gm.CreateCertificateToMem(sm2Template, sm2Template, key)
+		cert, err = gm.CreateCertificateToMem(sm2Template, sm2Template, cryptoSigner)
 	} else {
 		// Use the 'tls' profile that will return a certificate with the appropriate extensions
 		req := signer.SignRequest{

@@ -104,7 +104,7 @@ func signCert(req signer.SignRequest, ca *CA) (cert []byte, err error) {
 	certfile := ca.Config.CA.Certfile
 	//certfile := req.Profile
 	log.Infof("^^^^^^^^^^^^^^^^^^^^^^^certifle = %s", certfile)
-	rootkey, _, x509cert, err := util.GetSignerFromCertFile(certfile, ca.csp)
+	_, rootSigner, x509cert, err := util.GetSignerFromCertFile(certfile, ca.csp)
 	if err != nil {
 
 		return nil, err
@@ -126,7 +126,9 @@ func signCert(req signer.SignRequest, ca *CA) (cert []byte, err error) {
 		return nil, err
 	}
 
-	cert, err = gm.CreateCertificateToMem(template, rootca, rootkey)
+
+
+	cert, err = gm.CreateCertificateToMem(template, rootca, rootSigner)
 	if err != nil {
 		return nil, err
 	}
@@ -135,6 +137,8 @@ func signCert(req signer.SignRequest, ca *CA) (cert []byte, err error) {
 	log.Info("==================== Exit ParseCertificate")
 	if err == nil {
 		log.Infof("xxxx gmca.go signCert ok the sign cert len [%d]", len(cert))
+	} else {
+		return nil, err
 	}
 
 	var certRecord = certdb.CertificateRecord{
@@ -393,7 +397,7 @@ func FindProfile(policy *config.Signing, profile string) (*config.SigningProfile
 }
 
 //生成证书
-func createGmSm2Cert(key bccsp.Key, req *csr.CertificateRequest, priv crypto.Signer) (cert []byte, err error) {
+func createGmSm2Cert(key bccsp.Key, req *csr.CertificateRequest, signer crypto.Signer) (cert []byte, err error) {
 	log.Infof("xxx xxx in gmca.go  createGmSm2Cert...key :%T", key)
 
 	policy := CAPolicy()
@@ -418,7 +422,7 @@ func createGmSm2Cert(key bccsp.Key, req *csr.CertificateRequest, priv crypto.Sig
 		return nil, cferr.New(cferr.PolicyError, cferr.InvalidPolicy)
 	}
 
-	csrPEM, err := generate(priv, req)
+	csrPEM, err := generate(signer, req)
 	if err != nil {
 		log.Infof("xxxxxxxxxxxxx create csr error:%s", err)
 	}
@@ -444,7 +448,7 @@ func createGmSm2Cert(key bccsp.Key, req *csr.CertificateRequest, priv crypto.Sig
 
 	sm2Template.SubjectKeyId = key.SKI()
 	log.Infof("key is %T   ---%T", sm2Template.PublicKey, sm2Template)
-	cert, err = gm.CreateCertificateToMem(sm2Template, sm2Template, key)
+	cert, err = gm.CreateCertificateToMem(sm2Template, sm2Template, signer)
 	return cert, err
 }
 

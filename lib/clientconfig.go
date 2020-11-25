@@ -91,7 +91,7 @@ func (c *ClientConfig) GenCSR(home string) error {
 		return errors.Errorf("CSR common name not specified; use '--csr.cn' flag")
 	}
 
-	csrPEM, _, err := client.GenCSR(&c.CSR, c.CSR.CN)
+	csrPEM, _, _, err := client.GenCSR(&c.CSR, c.CSR.CN)
 	if err != nil {
 		return err
 	}
