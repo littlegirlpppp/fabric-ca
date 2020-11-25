@@ -272,6 +272,8 @@ github.com/tw-bc-group/aliyun-kms v0.0.0-20201120104640-a264dd746212 h1:DvJdpKXP
 github.com/tw-bc-group/aliyun-kms v0.0.0-20201120104640-a264dd746212/go.mod h1:GONQ2w384Dql01scA2vMwBv+9Vw/RIQRy2sCuAoLQ6k=
 github.com/tw-bc-group/fabric-gm v0.0.0-20201120080309-eb546e19c6ca h1:hvqG96xMvkFyY7LDiJEy70ameJvBrD1H7XLbMccSKss=
 github.com/tw-bc-group/fabric-gm v0.0.0-20201120080309-eb546e19c6ca/go.mod h1:7C774tGXUwGxjOcfy1v1qlCJJ0cfy7ANeCsMPov1zSQ=
+github.com/tw-bc-group/fabric-gm v0.0.0-20201125092432-5ee7fdb7b9c0 h1:Ynq4NqQuL2lbf/Z2nXp/Had/h8ZOZs83kWxbJkz8QVw=
+github.com/tw-bc-group/fabric-gm v0.0.0-20201125092432-5ee7fdb7b9c0/go.mod h1:GY1YkH4UPPz8x5TqM9JrlQS00RSPFRztUrhC4x/N1KU=
 github.com/tw-bc-group/mock-collaborative-encryption-lib v0.0.0-20201123032157-5c20ec7f3bc3 h1:4uVZFSCvi3c2lFQHJlN/UX/kab/h3SxR76mhmF5KAfY=
 github.com/tw-bc-group/mock-collaborative-encryption-lib v0.0.0-20201123032157-5c20ec7f3bc3/go.mod h1:QjkvRTkEeA1M6aov0ffiB++nduvJDmKhZAzIwLhGKs8=
 github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa h1:fCeVBt9bkKzOejVk+1TEIgluFyuKSmLoFR7jH5L+QXo=

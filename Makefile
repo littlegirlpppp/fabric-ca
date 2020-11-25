@@ -296,7 +296,7 @@ dist/linux-s390x:
 
 .PHONY: clean-vendor
 clean-vendor:
-	-@rm -rf vendor
+	@rm -rf vendor
 
 .PHONY: clean
 clean: docker-clean release-clean

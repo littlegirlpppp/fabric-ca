@@ -43,7 +43,7 @@ require (
 	github.com/spf13/viper v1.0.1-0.20171207042631-1a0c4a370c3e
 	github.com/stretchr/testify v1.6.1
 	github.com/tw-bc-group/aliyun-kms v0.0.0-20201120104640-a264dd746212
-	github.com/tw-bc-group/fabric-gm v0.0.0-20201120080309-eb546e19c6ca
+	github.com/tw-bc-group/fabric-gm v0.0.0-20201125092432-5ee7fdb7b9c0
 	github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa
 	golang.org/x/crypto v0.0.0-20201012173705-84dcc777aaee
 	gopkg.in/asn1-ber.v1 v1.0.0-20150924051756-4e86f4367175 // indirect
@@ -53,6 +53,3 @@ require (
 
 replace github.com/Hyperledger-TWGC/tjfoc-gm v0.0.0-20201117155542-9542a21fafd1 => github.com/tw-bc-group/tjfoc-gm v0.0.0-20201124022249-edd640b7bf9f
 
-replace github.com/tw-bc-group/fabric-gm v0.0.0-20201120080309-eb546e19c6ca => ../fabric-gm
-
-replace github.com/tw-bc-group/aliyun-kms v0.0.0-20201120104640-a264dd746212 => ../aliyun-kms
