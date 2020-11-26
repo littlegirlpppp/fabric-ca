@@ -12,7 +12,7 @@ See [User's Guide for Fabric CA](https://hyperledger-fabric-ca.readthedocs.io) f
 * docker-compose version 1.27.4 or later
 * A Linux Foundation ID  (see [create a Linux Foundation ID](https://identity.linuxfoundation.org/))
 
-## Build
+## Build artifacts
 ```
 $ make native
 $ make docker
