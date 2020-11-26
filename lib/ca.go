@@ -1210,9 +1210,6 @@ func validateMatchingKeys(cert *x509.Certificate, keyFile string) error {
 				}
 
 				sm2PubKey := keyAdapter.PublicKey()
-				if err != nil {
-					return err
-				}
 				if pub.X.Cmp(sm2PubKey.X) != 0 || pub.Y.Cmp(sm2PubKey.Y) != 0 {
 					return errors.New("kms sm2 private key does not match public key")
 				}
