@@ -261,10 +261,10 @@ github.com/sykesm/zap-logfmt v0.0.3/go.mod h1:AuBd9xQjAe3URrWT1BBDk2v2onAZHkZkWR
 github.com/syndtr/goleveldb v0.0.0-20180815032940-ae2bd5eed72d/go.mod h1:Z4AUp2Km+PwemOoO/VB5AOx9XSsIItzFjoJlOSiYmn0=
 github.com/tedsuo/ifrit v0.0.0-20180802180643-bea94bb476cc/go.mod h1:eyZnKCc955uh98WQvzOm0dgAeLnf2O0Rz0LPoC5ze+0=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20170815181823-89b8d40f7ca8/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
-github.com/tw-bc-group/aliyun-kms v0.0.0-20201126094606-81f602f99a5a h1:vssIEROxtdYYSl2s1xeIZOmBY6WHsQdB7PJHspWkm4k=
-github.com/tw-bc-group/aliyun-kms v0.0.0-20201126094606-81f602f99a5a/go.mod h1:GONQ2w384Dql01scA2vMwBv+9Vw/RIQRy2sCuAoLQ6k=
-github.com/tw-bc-group/fabric-gm v0.0.0-20201126095130-4285f2a8be7b h1:MnIDm3+kI8tLSoCLZkwXwYCderZRk+JixC5UgfTzuXA=
-github.com/tw-bc-group/fabric-gm v0.0.0-20201126095130-4285f2a8be7b/go.mod h1:C8HRV/7BPKt5D07Yvr7X7NE2ZVoQTBFEQOGwUZMk06o=
+github.com/tw-bc-group/aliyun-kms v0.0.0-20201126132256-b9c99bba772d h1:r6OsvTtWJ2b9TJ+YSzskl7EtrKbSiN/q/p78zaSv4Jc=
+github.com/tw-bc-group/aliyun-kms v0.0.0-20201126132256-b9c99bba772d/go.mod h1:GONQ2w384Dql01scA2vMwBv+9Vw/RIQRy2sCuAoLQ6k=
+github.com/tw-bc-group/fabric-gm v0.0.0-20201126132708-3105cc7d820b h1:36Zd3Qv70rY+qDde3mVVZ4mIivM/dnxj6RwW1v35RK4=
+github.com/tw-bc-group/fabric-gm v0.0.0-20201126132708-3105cc7d820b/go.mod h1:Bd4Tk9ckVcwJSFCw1LRxkqfkKNRygNuSGmtGR2Me7ys=
 github.com/tw-bc-group/mock-collaborative-encryption-lib v0.0.0-20201126034806-c067c4a3fca8 h1:D7szAPRT3CYP944ztLpZRZodntBlx6njqrJV8l5SHIU=
 github.com/tw-bc-group/mock-collaborative-encryption-lib v0.0.0-20201126034806-c067c4a3fca8/go.mod h1:lGHcrM+KFHJgAojqlTSag3VVWov0kZlfS/mnVea9l3o=
 github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa h1:fCeVBt9bkKzOejVk+1TEIgluFyuKSmLoFR7jH5L+QXo=

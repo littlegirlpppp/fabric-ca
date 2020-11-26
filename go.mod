@@ -1,5 +1,6 @@
 module github.com/tw-bc-group/fabric-ca-gm
 
+//fix 1.14
 go 1.15
 
 require (
@@ -42,8 +43,8 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.0.1-0.20171207042631-1a0c4a370c3e
 	github.com/stretchr/testify v1.6.1
-	github.com/tw-bc-group/aliyun-kms v0.0.0-20201126094606-81f602f99a5a
-	github.com/tw-bc-group/fabric-gm v0.0.0-20201126095130-4285f2a8be7b
+	github.com/tw-bc-group/aliyun-kms v0.0.0-20201126132256-b9c99bba772d
+	github.com/tw-bc-group/fabric-gm v0.0.0-20201126132708-3105cc7d820b
 	github.com/tw-bc-group/net-go-gm v0.0.0-20201029102405-17a5e22cadaa
 	golang.org/x/crypto v0.0.0-20201012173705-84dcc777aaee
 	gopkg.in/asn1-ber.v1 v1.0.0-20150924051756-4e86f4367175 // indirect
