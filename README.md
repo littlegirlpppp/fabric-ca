@@ -6,13 +6,17 @@ See [User's Guide for Fabric CA](https://hyperledger-fabric-ca.readthedocs.io) f
 
 ## Prerequisites
 
-* Go 1.11.5 installation or later
+* Go 1.14.7 installation or later
 * **GOPATH** environment variable is set correctly
-* docker version 17.06 or later
-* docker-compose version 1.14 or later
+* docker version 19.03.13 or later
+* docker-compose version 1.27.4 or later
 * A Linux Foundation ID  (see [create a Linux Foundation ID](https://identity.linuxfoundation.org/))
 
-
+## Build
+```
+$ make native
+$ make docker
+```
 ## Contribution guidelines
 
 You are welcome to contribute to Fabric CA!
