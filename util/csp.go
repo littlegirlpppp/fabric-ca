@@ -152,12 +152,9 @@ func getBCCSPKeyOpts(kr csr.KeyRequest, ephemeral bool) (opts bccsp.KeyGenOpts, 
 			return nil, errors.Errorf("Invalid ECDSA key size: %d", kr.Size())
 		}
 	case "gmsm2":
-		if os.Getenv("CA_GM_PROVIDER") == "ALIYUN_KMS" {
-			return &bccsp.KMSGMSM2KeyGenOpts{Temporary: ephemeral}, nil
-		} else {
-
-			return &bccsp.GMSM2KeyGenOpts{Temporary: ephemeral}, nil
-		}
+		return &bccsp.GMSM2KeyGenOpts{Temporary: ephemeral}, nil
+	case "gmsm2_kms":
+		return &bccsp.KMSGMSM2KeyGenOpts{Temporary: ephemeral}, nil
 	default:
 		return nil, errors.Errorf("Invalid algorithm: %s", kr.Algo())
 	}

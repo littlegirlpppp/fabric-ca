@@ -56,6 +56,7 @@ import (
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/bccsp/gm"
 	"github.com/tw-bc-group/fabric-gm/common/attrmgr"
+	zhsm2 "github.com/tw-bc-group/zhonghuan-ce/sm2"
 )
 
 const (
@@ -1203,21 +1204,19 @@ func validateMatchingKeys(cert *x509.Certificate, keyFile string) error {
 		log.Debug("check public key")
 		switch pub.Curve {
 		case sm2.P256Sm2():
-			if os.Getenv("CA_GM_PROVIDER") == "ALIYUN_KMS" {
-				keyAdapter, err := kmssm2.CreateSm2KeyAdapter(strings.TrimRight(string(keyPEM), "\n"), kmssm2.SignAndVerify)
+			privKey, err := util.GetSM2PrivateKey(keyPEM)
+			if err != nil {
+				var sm2PubKey *sm2.PublicKey
+				//maybe kms sm2 key ?
+				adapter, err := kmssm2.CreateSm2KeyAdapter(strings.TrimSpace(string(keyPEM)), kmssm2.SignAndVerify)
 				if err != nil {
 					return err
 				}
-
-				sm2PubKey := keyAdapter.PublicKey()
+				sm2PubKey = adapter.PublicKey()
 				if pub.X.Cmp(sm2PubKey.X) != 0 || pub.Y.Cmp(sm2PubKey.Y) != 0 {
 					return errors.New("kms sm2 private key does not match public key")
 				}
 			} else {
-				privKey, err := util.GetSM2PrivateKey(keyPEM)
-				if err != nil {
-					return err
-				}
 				if pub.X.Cmp(privKey.X) != 0 || pub.Y.Cmp(privKey.Y) != 0 {
 					return errors.New("sm2 private key does not match public key")
 				}
