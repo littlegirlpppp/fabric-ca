@@ -42,6 +42,7 @@ import (
 	cametrics "github.com/tw-bc-group/fabric-ca-gm/lib/server/metrics"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/operations"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
+	cspDecryptor "github.com/tw-bc-group/fabric-gm/bccsp/decrypter"
 	"github.com/tw-bc-group/fabric-gm/bccsp/gm"
 	"github.com/tw-bc-group/fabric-gm/common/metrics"
 )
@@ -633,17 +634,12 @@ func (s *Server) listenAndServe() (err error) {
 			}
 		}
 
-		bccspKey, cer, err := util.LoadX509KeyPairSM2(c.TLS.CertFile, c.TLS.KeyFile, s.csp)
+		cspKey, cer, err := util.LoadX509KeyPairSM2(c.TLS.CertFile, c.TLS.KeyFile, s.csp)
 		if err != nil {
 			return err
 		}
 
-		bccspKeyBytes, err := bccspKey.Bytes()
-		if err != nil {
-			return err
-		}
-
-		sm2PrivateKey, err := x509.ParsePKCS8UnecryptedPrivateKey(bccspKeyBytes)
+		decrypter, err := cspDecryptor.New(s.csp, cspKey)
 		if err != nil {
 			return err
 		}
@@ -653,7 +649,7 @@ func (s *Server) listenAndServe() (err error) {
 		}
 
 		enCer := *cer
-		enCer.PrivateKey = sm2PrivateKey
+		enCer.PrivateKey = decrypter
 
 		authType := strings.ToLower(c.TLS.ClientAuth.Type)
 		if clientAuth, ok = clientAuthTypes[authType]; !ok {
