@@ -122,16 +122,20 @@ vendor: clean-vendor
 
 # We (re)build a package within a docker context but persist the $GOPATH/pkg
 # directory so that subsequent builds are faster
-build/docker/bin/%: vendor
+build/docker/bin/%: build/docker/gocache
 	@echo "Building $@"
 	@mkdir -p $(@D) build/docker/$(@F)/pkg
 	@$(DRUN) \
-		-e GOCACHE=/opt/gopath/pkg \
+		-e GOCACHE=/opt/gopath/gocache \
+		-v $(abspath build/docker/gocache):/opt/gopath/gocache \
 		-v $(abspath build/docker/bin):/opt/gopath/bin \
 		-v $(abspath build/docker/$(@F)/pkg):/opt/gopath/pkg \
 		twblockchain/fabric-baseimage:0.4.22 \
 		go install -ldflags "$(DOCKER_GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
 	@touch $@
+
+build/docker/gocache:
+	@mkdir -p build/docker/gocache
 
 build/image/%/$(DUMMY): Makefile build/image/%/payload
 	$(eval TARGET = ${patsubst build/image/%/$(DUMMY),%,${@}})
