@@ -130,7 +130,7 @@ build/docker/bin/%: build/docker/gocache
 		-v $(abspath build/docker/gocache):/opt/gopath/gocache \
 		-v $(abspath build/docker/bin):/opt/gopath/bin \
 		-v $(abspath build/docker/$(@F)/pkg):/opt/gopath/pkg \
-		twblockchain/fabric-baseimage:0.4.22 \
+		$(BASE_DOCKER_NS)/fabric-baseimage:$(BASE_DOCKER_TAG) \
 		go install -ldflags "$(DOCKER_GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
 	@touch $@
 
