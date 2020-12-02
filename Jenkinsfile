@@ -35,8 +35,7 @@ pipeline {
                     checkout scm
 
                     sh '''
-                    rm -rf build vendor
-                    make docker
+                    make clean docker
                     '''
                 }
             }
