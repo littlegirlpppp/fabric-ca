@@ -18,6 +18,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -56,7 +57,6 @@ import (
 	"github.com/tw-bc-group/fabric-gm/bccsp"
 	"github.com/tw-bc-group/fabric-gm/bccsp/gm"
 	"github.com/tw-bc-group/fabric-gm/common/attrmgr"
-	zhsm2 "github.com/tw-bc-group/zhonghuan-ce/sm2"
 )
 
 const (
@@ -73,6 +73,7 @@ var (
 	defaultIntermediateCACertificateExpiration = parseDuration("43800h")
 	// Default issued certificate expiration is 1 year (in hours).
 	defaultIssuedCertificateExpiration = parseDuration("8760h")
+	reMatchKeyFileComments             = regexp.MustCompile(`--+.*`)
 )
 
 // CA represents a certificate authority which signs, issues and revokes certificates
@@ -1207,8 +1208,10 @@ func validateMatchingKeys(cert *x509.Certificate, keyFile string) error {
 			privKey, err := util.GetSM2PrivateKey(keyPEM)
 			if err != nil {
 				var sm2PubKey *sm2.PublicKey
+				keyId := strings.TrimSpace(reMatchKeyFileComments.ReplaceAllString(string(keyPEM), ""))
+
 				//maybe kms sm2 key ?
-				adapter, err := kmssm2.CreateSm2KeyAdapter(strings.TrimSpace(string(keyPEM)), kmssm2.SignAndVerify)
+				adapter, err := kmssm2.CreateSm2KeyAdapter(keyId, kmssm2.SignAndVerify)
 				if err != nil {
 					return err
 				}
