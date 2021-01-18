@@ -1209,7 +1209,6 @@ func validateMatchingKeys(cert *x509.Certificate, keyFile string) error {
 			if err != nil {
 				var sm2PubKey *sm2.PublicKey
 				keyId := strings.TrimSpace(reMatchKeyFileComments.ReplaceAllString(string(keyPEM), ""))
-
 				//maybe kms sm2 key ?
 				adapter, err := kmssm2.CreateSm2KeyAdapter(keyId, kmssm2.SignAndVerify)
 				if err != nil {
