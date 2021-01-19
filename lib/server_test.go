@@ -11,11 +11,12 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"github.com/Hyperledger-TWGC/tjfoc-gm/gmtls"
+	x509GM "github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 	"io"
 	"io/ioutil"
 	"math/rand"
 	"net"
-	"net/http"
 	"os"
 	"path"
 	"path/filepath"
@@ -33,15 +34,17 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/tw-bc-group/fabric-ca-gm/api"
 	. "github.com/tw-bc-group/fabric-ca-gm/lib"
+	libtls "github.com/tw-bc-group/fabric-ca-gm/lib/tls"
+	libgmtls "github.com/tw-bc-group/fabric-ca-gm/lib/gmtls"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/metadata"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/db/mysql"
 	"github.com/tw-bc-group/fabric-ca-gm/lib/server/operations"
 	cadbuser "github.com/tw-bc-group/fabric-ca-gm/lib/server/user"
-	libtls "github.com/tw-bc-group/fabric-ca-gm/lib/tls"
 	"github.com/tw-bc-group/fabric-ca-gm/util"
 	"github.com/tw-bc-group/fabric-gm/bccsp/factory"
 	"github.com/tw-bc-group/fabric-gm/common/metrics/disabled"
+	"github.com/tw-bc-group/net-go-gm/http"
 )
 
 const (
@@ -683,9 +686,9 @@ func TestSRVRunningTLSServer(t *testing.T) {
 
 	clientConfig := &ClientConfig{
 		URL: fmt.Sprintf("https://localhost:%d", rootPort),
-		TLS: libtls.ClientTLSConfig{
+		TLS: libgmtls.ClientTLSConfig{
 			CertFiles: []string{"../testdata/root.pem"},
-			Client: libtls.KeyCertFiles{
+			Client: libgmtls.KeyCertFiles{
 				KeyFile:  "../testdata/tls_client-key.pem",
 				CertFile: "../testdata/tls_client-cert.pem",
 			},
@@ -1802,7 +1805,7 @@ func testNoClientCert(t *testing.T) {
 
 	clientConfig := &ClientConfig{
 		URL: fmt.Sprintf("https://localhost:%d", rootPort),
-		TLS: libtls.ClientTLSConfig{
+		TLS: libgmtls.ClientTLSConfig{
 			CertFiles: []string{"../testdata/root.pem"},
 		},
 	}
@@ -1865,7 +1868,7 @@ func testClientAuth(t *testing.T) {
 
 	clientConfig := &ClientConfig{
 		URL: fmt.Sprintf("https://localhost:%d", rootPort),
-		TLS: libtls.ClientTLSConfig{
+		TLS: libgmtls.ClientTLSConfig{
 			CertFiles: []string{"../testdata/root.pem"},
 		},
 	}
@@ -1881,9 +1884,9 @@ func testClientAuth(t *testing.T) {
 	// Client created with certificate and key for TLS
 	clientConfig = &ClientConfig{
 		URL: fmt.Sprintf("https://localhost:%d", rootPort),
-		TLS: libtls.ClientTLSConfig{
+		TLS: libgmtls.ClientTLSConfig{
 			CertFiles: []string{"../testdata/root.pem"},
-			Client: libtls.KeyCertFiles{
+			Client: libgmtls.KeyCertFiles{
 				KeyFile:  "../testdata/tls_client-key.pem",
 				CertFile: "../testdata/tls_client-cert.pem",
 			},
@@ -2026,6 +2029,7 @@ func TestSRVSqliteLocking(t *testing.T) {
 		}
 	}
 }
+
 
 func TestSRVNewUserRegistryMySQL(t *testing.T) {
 	datasource := ""
@@ -2535,7 +2539,7 @@ func getTLSTestClient(port int, trustedTLSCerts []string) *Client {
 	return &Client{
 		Config: &ClientConfig{
 			URL: fmt.Sprintf("https://localhost:%d", port),
-			TLS: libtls.ClientTLSConfig{
+			TLS: libgmtls.ClientTLSConfig{
 				Enabled:   true,
 				CertFiles: trustedTLSCerts,
 			},
@@ -2859,20 +2863,20 @@ func TestPrometheusMetricsE2E(t *testing.T) {
 	gt.Expect(err).NotTo(HaveOccurred())
 
 	// Prometheus client
-	clientCert, err := tls.LoadX509KeyPair(
+	clientCert, err := gmtls.LoadX509KeyPair(
 		filepath.Join(testdata, "tls_client-cert.pem"),
 		filepath.Join(testdata, "tls_client-key.pem"),
 	)
 	gt.Expect(err).NotTo(HaveOccurred())
-	clientCertPool := x509.NewCertPool()
+	clientCertPool := x509GM.NewCertPool()
 	caCert, err := ioutil.ReadFile(filepath.Join(testdata, "root.pem"))
 	gt.Expect(err).NotTo(HaveOccurred())
 	clientCertPool.AppendCertsFromPEM(caCert)
 
 	c := &http.Client{
 		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				Certificates: []tls.Certificate{clientCert},
+			TLSClientConfig: &gmtls.Config{
+				Certificates: []gmtls.Certificate{clientCert},
 				RootCAs:      clientCertPool,
 			},
 		},
