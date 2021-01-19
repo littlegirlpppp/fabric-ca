@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	mathRand "math/rand"
 	"net"
 	"net/mail"
 	"time"
@@ -515,6 +516,17 @@ func parseCertificateRequest(csrBytes []byte) (template *x509GM.Certificate, err
 	return
 }
 
+
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func randSeq(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[mathRand.Intn(len(letters))]
+	}
+	return string(b)
+}
+
 //cloudflare 证书请求 转成 国密证书请求
 func generate(priv crypto.Signer, req *csr.CertificateRequest) (csr []byte, err error) {
 	log.Info("xx entry gm generate")
@@ -544,9 +556,11 @@ func generate(priv crypto.Signer, req *csr.CertificateRequest) (csr []byte, err 
 			return
 		}
 	}
-	if req.SerialNumber != "" {
 
+	if req.SerialNumber != "" {
+		req.SerialNumber = randSeq(65)
 	}
+
 	csr, err = gm.CreateSm2CertificateRequestToMem(&tpl, priv)
 	log.Info("xx exit generate")
 	return csr, err
