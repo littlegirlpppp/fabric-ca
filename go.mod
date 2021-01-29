@@ -11,7 +11,7 @@ require (
 	github.com/go-logfmt/logfmt v0.4.0 // indirect
 	github.com/go-sql-driver/mysql v1.4.1-0.20190510102335-877a9775f068
 	github.com/golang/protobuf v1.4.2
-	github.com/google/certificate-transparency-go v1.0.21
+	github.com/google/certificate-transparency-go v1.0.21 // indirect
 	github.com/gorilla/handlers v1.4.0
 	github.com/gorilla/mux v1.6.3-0.20181228004216-ef912dd76ebe
 	github.com/grantae/certinfo v0.0.0-20170412194111-59d56a35515b

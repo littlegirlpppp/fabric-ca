@@ -27,9 +27,9 @@ func ConfigureBCCSP(optsPtr **factory.FactoryOpts, mspDir, homeDir string) error
 	if opts == nil {
 		opts = &factory.FactoryOpts{}
 	}
-	if opts.ProviderName == "" {
+	//if opts.ProviderName == "" {
 		opts.ProviderName = "GM"
-	}
+	//}
 	SetProviderName(opts.ProviderName)
 	if strings.ToUpper(opts.ProviderName) == "SW" {
 		if opts.SwOpts == nil {
