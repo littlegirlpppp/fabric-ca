@@ -19,7 +19,7 @@ testdata/ec_cert.pem
 /release/linux-ppc64le
 /release/windows-amd64
 
-vendor/
+.DS_Store
 # tox
 .tox/
 .idea/
