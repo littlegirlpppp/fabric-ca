@@ -479,7 +479,7 @@ func parseCertificateRequest(csrBytes []byte) (template *x509GM.Certificate, err
 	log.Infof("xxxx publicKey :%T", template.PublicKey)
 
 	template.NotBefore = time.Now()
-	template.NotAfter = time.Now().Add(time.Hour * 1000)
+	template.NotAfter =  time.Now().Add(5 * helpers.OneYear)
 	//log.Infof("-----------csrv = %+v", csrv)
 	for _, val := range csrv.Extensions {
 		// Check the CSR for the X.509 BasicConstraints (RFC 5280, 4.2.1.9)
